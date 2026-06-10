@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: spring-reactive
+  graphql:
+    graphiql:
+      enabled: true
+  codec:
+    max-in-memory-size: 2MB
+  security:
+    oauth2:
+      client:
+        registration:
+          my-api:
+            authorization-grant-type: client_credentials
+            client-id: REPLACE_ME
+            client-secret: REPLACE_ME
+        provider:
+          my-api:
+            token-uri: https://your-auth-server.example.com/oauth2/token
+
+logging:
+  level:
+    com.tiltedev: DEBUG

@@ -1,0 +1,35 @@
+type Destination {
+    id: ID!
+    cityName: String!
+    latitude: Float
+    longitude: Float
+    addedBy: String
+    createdAt: String
+    country: Country
+}
+
+type Country {
+    code: String!
+    name: String!
+    capital: String
+    region: String
+    population: Int
+    flagUrl: String
+}
+
+type Query {
+    destinations: [Destination!]!
+    destination(id: ID!): Destination
+}
+
+type Mutation {
+    addDestination(
+        cityName: String!
+        countryCode: String!
+        latitude: Float!
+        longitude: Float!
+        addedBy: String
+    ): Destination!
+
+    removeDestination(id: ID!): Boolean!
+}
