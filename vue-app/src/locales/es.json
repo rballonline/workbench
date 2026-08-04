@@ -1,0 +1,195 @@
+{
+  "app": {
+    "title": "Lugares que quiero visitar",
+    "subtitle": "Lista de viajes compartida"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "remove": "Eliminar",
+    "search": "Buscar",
+    "language": "Idioma",
+    "toggleTheme": "Cambiar tema claro/oscuro",
+    "errors": {
+      "unreachable": "No se puede conectar con la API. ¿Está la aplicación Spring en el puerto 8080?",
+      "notFound": "No encontrado.",
+      "validation": "El backend rechazó la petición.",
+      "other": "Algo salió mal."
+    }
+  },
+  "nav": {
+    "welcome": "Inicio",
+    "wishlist": "Lista",
+    "explore": "Explorar",
+    "weather": "Clima",
+    "countries": "Países",
+    "iss": "Rastreo ISS",
+    "live": "Flujo en vivo",
+    "settings": "Ajustes",
+    "sections": {
+      "plan": "Planificar",
+      "lookup": "Consultar",
+      "live": "En vivo"
+    }
+  },
+  "welcome": {
+    "heading": "Bienvenido",
+    "intro": "Una lista compartida de lugares que vale la pena visitar. Todo lo que ves viene del backend spring-reactive, y los destinos nuevos llegan por WebSocket en cuanto alguien los añade.",
+    "byRegion": "Destinos por región",
+    "stats": {
+      "destinations": "Destinos",
+      "countries": "Países",
+      "contributors": "Colaboradores",
+      "stream": "Flujo en vivo"
+    },
+    "cards": {
+      "wishlist": "Consulta la lista compartida, añade lugares y quita los que ya visitaste.",
+      "explore": "Busca ciudades del mundo y añade las mejores a la lista.",
+      "weather": "Condiciones actuales de cualquier ciudad, geocodificada en el camino.",
+      "countries": "Bandera, capital, región y población de cualquier país.",
+      "iss": "Observa la Estación Espacial Internacional cruzar el mapa.",
+      "live": "El flujo WebSocket sin procesar, tal como lo envía el backend."
+    }
+  },
+  "wishlist": {
+    "heading": "Lista de destinos",
+    "intro": "Todos los lugares de la lista compartida. Lo que otros añaden o quitan aparece aquí sin recargar.",
+    "add": "Añadir destino",
+    "addTitle": "Añadir un destino",
+    "gridView": "Vista de cuadrícula",
+    "mapView": "Vista de mapa",
+    "mapLabel": "Mapa mundial con los destinos de la lista",
+    "mapCaption": "{count} destinos sobre una proyección equirectangular.",
+    "emptyTitle": "Todavía no hay nada en la lista",
+    "emptyBody": "Busca una ciudad y añade el primer destino.",
+    "yourName": "Tu nombre",
+    "yourNameHint": "Opcional. Aparece junto a los lugares que añades.",
+    "justAdded": "Nuevo",
+    "checkWeather": "Clima",
+    "addedByOn": "Añadido por {name} el {date}",
+    "addedOn": "Añadido el {date}",
+    "addedSnack": "{city} se añadió a la lista.",
+    "removeTitle": "¿Eliminar destino?",
+    "removeBody": "{city} se eliminará para todos."
+  },
+  "explore": {
+    "heading": "Explorar",
+    "intro": "La búsqueda de ciudades geocodifica tu consulta y luego consulta el país, encadenando dos APIs externas en una sola respuesta.",
+    "searchLabel": "Nombre de la ciudad",
+    "searchHint": "Al menos dos caracteres.",
+    "typeMore": "Escribe al menos dos caracteres.",
+    "noMatches": "Ninguna ciudad coincide.",
+    "noResultsTitle": "No se encontraron ciudades",
+    "noResultsBody": "Prueba otra grafía o quita el sufijo del país.",
+    "addToWishlist": "Añadir",
+    "onWishlist": "En la lista"
+  },
+  "weather": {
+    "heading": "Clima",
+    "intro": "Condiciones actuales de cualquier ciudad. El backend geocodifica el nombre y después pide el pronóstico para esas coordenadas.",
+    "cityLabel": "Nombre de la ciudad",
+    "fromWishlist": "De tu lista:",
+    "unknownCountry": "País desconocido",
+    "notFound": "No se encontró el clima de «{city}».",
+    "chainNote": "Dos llamadas secuenciales a Open-Meteo: geocodificación y luego pronóstico.",
+    "codes": {
+      "clear": "Cielo despejado",
+      "mainlyClear": "Mayormente despejado",
+      "partlyCloudy": "Parcialmente nublado",
+      "overcast": "Nublado",
+      "fog": "Niebla",
+      "drizzle": "Llovizna",
+      "rain": "Lluvia",
+      "snow": "Nieve",
+      "showers": "Chubascos",
+      "snowShowers": "Chubascos de nieve",
+      "thunderstorm": "Tormenta",
+      "unknown": "Condiciones no disponibles"
+    }
+  },
+  "countries": {
+    "heading": "Países",
+    "intro": "Busca un país por nombre. Este endpoint devuelve la respuesta de REST Countries sin transformar, así que su forma difiere de los datos de país adjuntos a los destinos.",
+    "nameLabel": "Nombre del país",
+    "nameHint": "Nombre común, por ejemplo Japón o Portugal.",
+    "fromWishlist": "En tu lista:",
+    "notFound": "Ningún país coincide con «{name}».",
+    "unknownRegion": "Región desconocida",
+    "capital": "Capital",
+    "population": "Población",
+    "region": "Región",
+    "onWishlist": "Destinos en la lista",
+    "passthroughNote": "Servido por GET /api/countries/{name}: CountryApiResult sin procesar, no CountryResponse."
+  },
+  "iss": {
+    "heading": "Rastreo ISS",
+    "intro": "El backend consulta Open Notify cada cinco segundos y envía cada posición por el mismo WebSocket que transporta los eventos de destinos.",
+    "pollNow": "Consultar ahora",
+    "clearTrail": "Borrar traza",
+    "mapLabel": "Mapa mundial con la posición actual de la ISS y su traza reciente",
+    "legendIss": "ISS",
+    "legendWishlist": "Destinos de la lista",
+    "pushNote": "Las posiciones llegan cada 5 segundos mientras el socket está abierto.",
+    "secondsAgo": "hace {n}s",
+    "nearest": "Destino más cercano de la lista: {city}",
+    "nearestDistance": "A unos {km} km, distancia de círculo máximo.",
+    "hemisphere": {
+      "north": "Norte",
+      "south": "Sur"
+    },
+    "stats": {
+      "position": "Posición",
+      "age": "Muestreado",
+      "samples": "Puntos de traza",
+      "hemisphere": "Hemisferio"
+    }
+  },
+  "live": {
+    "heading": "Flujo en vivo",
+    "intro": "Todos los mensajes recibidos en /ws/destinations, del más reciente al más antiguo.",
+    "feed": "Mensajes",
+    "reconnect": "Reconectar",
+    "clear": "Limpiar",
+    "waiting": "Esperando el primer mensaje…",
+    "streamTooltip": "Actualizaciones en vivo desde /ws/destinations",
+    "mergeNote": "El socket combina dos flujos independientes sin sobre, así que el cliente los distingue por la presencia del campo «action».",
+    "status": {
+      "idle": "Inactivo",
+      "connecting": "Conectando",
+      "open": "En vivo",
+      "closed": "Sin conexión"
+    },
+    "filters": {
+      "all": "Todos",
+      "destinations": "Destinos",
+      "iss": "ISS"
+    },
+    "counts": {
+      "destinations": "{n} destinos",
+      "iss": "{n} ISS"
+    },
+    "events": {
+      "CREATED": "{city} ({country}) añadido",
+      "UPDATED": "{city} ({country}) actualizado",
+      "DELETED": "{city} ({country}) eliminado",
+      "ISS": "ISS en {lat}, {lon}"
+    }
+  },
+  "settings": {
+    "heading": "Ajustes",
+    "intro": "Preferencias locales y el backend con el que habla esta aplicación.",
+    "identity": "Identidad",
+    "identityNote": "El backend no tiene autenticación: addedBy es texto libre, así que esto es solo un nombre guardado en tu navegador.",
+    "appearance": "Apariencia",
+    "darkMode": "Modo oscuro",
+    "backend": "Backend",
+    "restBase": "Base REST",
+    "wsUrl": "WebSocket",
+    "sameOrigin": "(mismo origen: Vite hace de proxy en desarrollo)",
+    "overrideActive": "Apuntando a un backend indicado con ?api= en lugar del configurado en la compilación.",
+    "overrideHint": "Añade ?api=http://host:8080 a la URL para apuntar a otro backend sin recompilar.",
+    "reloadData": "Recargar destinos",
+    "endpoints": "Endpoints en uso",
+    "endpoint": "Endpoint",
+    "usedBy": "Usado por"
+  }
+}

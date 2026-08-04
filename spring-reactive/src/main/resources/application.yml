@@ -12,11 +12,22 @@ spring:
         registration:
           my-api:
             authorization-grant-type: client_credentials
-            client-id: REPLACE_ME
-            client-secret: REPLACE_ME
+            client-id: ${api-client-id}
+            client-secret: ${api-client-secret}
         provider:
           my-api:
             token-uri: https://your-auth-server.example.com/oauth2/token
+
+app:
+  http-client:
+    timeout: 10s
+    retry:
+      enabled: true
+      max-retries: 2
+      initial-backoff: 200ms
+      max-backoff: 2s
+      jitter: 0.5
+      idempotent-only: true
 
 logging:
   level:

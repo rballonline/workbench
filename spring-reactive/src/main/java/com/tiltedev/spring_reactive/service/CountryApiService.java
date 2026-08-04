@@ -18,13 +18,15 @@ public class CountryApiService {
 
     public Mono<CountryApiResult> fetchByCode(String alpha2Code) {
         log.debug("Fetching country by code: {}", alpha2Code);
-        return httpClient.getFlux(countriesWebClient, "/v3.1/alpha/" + alpha2Code, CountryApiResult.class, uri -> {})
+        return httpClient.getFlux(countriesWebClient, "/v3.1/alpha/" + alpha2Code, CountryApiResult.class, uri -> {
+        })
                 .next();
     }
 
     public Mono<CountryApiResult> fetchByName(String name) {
         log.debug("Fetching country by name: {}", name);
-        return httpClient.getFlux(countriesWebClient, "/v3.1/name/" + name, CountryApiResult.class, uri -> {})
+        return httpClient.getFlux(countriesWebClient, "/v3.1/name/" + name, CountryApiResult.class, uri -> {
+        })
                 .next();
     }
 }

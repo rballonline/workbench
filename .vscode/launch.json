@@ -1,0 +1,89 @@
+{
+  // Workspace-wide launch configs. One folder per project under c:\Code\workbench.
+  //
+  // Convention for adding new projects:
+  //   name:  "<folder-name>: <what it does>"
+  //   cwd:   "${workspaceFolder}/<folder-name>"
+  // Keep each project's configs grouped together, and add a compound below if it
+  // needs to start alongside something else.
+  "version": "0.2.0",
+  "configurations": [
+    // ─── spring-reactive (Java / Spring Boot / WebFlux) ──────────────────────
+    {
+      "type": "java",
+      "name": "spring-reactive: Debug",
+      "request": "launch",
+      "mainClass": "com.tiltedev.spring_reactive.SpringReactiveApplication",
+      "projectName": "spring-reactive",
+      "cwd": "${workspaceFolder}/spring-reactive",
+      "args": "--spring.profiles.active=local",
+      "console": "internalConsole"
+    },
+    {
+      "type": "java",
+      "name": "spring-reactive: Run (no debug)",
+      "request": "launch",
+      "mainClass": "com.tiltedev.spring_reactive.SpringReactiveApplication",
+      "projectName": "spring-reactive",
+      "cwd": "${workspaceFolder}/spring-reactive",
+      "args": "--spring.profiles.active=local",
+      "noDebug": true,
+      "console": "internalConsole"
+    },
+    {
+      // Runs whichever Java file is open, if it has a main method.
+      // (JUnit tests run from the Testing view / CodeLens, not from here.)
+      "type": "java",
+      "name": "Java: Debug current file",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      // For a JVM started elsewhere, e.g.:
+      //   ./gradlew bootRun --debug-jvm
+      //   java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar app.jar
+      "type": "java",
+      "name": "spring-reactive: Attach to JVM (5005)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "projectName": "spring-reactive"
+    },
+
+    // ─── vue-app (Vite dev server + browser) ────────────────────────────────
+    {
+      "type": "node-terminal",
+      "name": "vue-app: Dev server",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/vue-app",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    },
+    {
+      "type": "chrome",
+      "name": "vue-app: Attach to browser",
+      "request": "launch",
+      "url": "http://localhost:3002",
+      "webRoot": "${workspaceFolder}/vue-app",
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceFolder}/vue-app/src/*",
+        "/@fs/*": "/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full stack: spring-reactive + vue-app",
+      "configurations": ["spring-reactive: Debug", "vue-app: Dev server"],
+      "stopAll": true,
+      "presentation": {
+        "group": "1-compounds",
+        "order": 1
+      }
+    }
+  ]
+}
