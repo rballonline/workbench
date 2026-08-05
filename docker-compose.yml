@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: spring_reactive
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./spring-reactive
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      # SecurityConfig's OAuth2 client registration requires these placeholders to
+      # resolve at startup even though the M2M flow isn't exercised locally.
+      API_CLIENT_ID: unused
+      API_CLIENT_SECRET: unused
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build: ./vue-app
+    ports:
+      - "3002:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql-data:

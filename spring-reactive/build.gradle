@@ -27,6 +27,10 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.2'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.springframework.boot:spring-boot-flyway'
+	// Flyway migrates over JDBC even in this R2DBC-only app; Boot's FlywayAutoConfiguration
+	// needs org.springframework.jdbc.support.JdbcUtils on the classpath or it silently no-ops.
+	runtimeOnly 'org.springframework:spring-jdbc'
 	runtimeOnly 'org.flywaydb:flyway-mysql'
 	runtimeOnly 'io.asyncer:r2dbc-mysql:1.3.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
