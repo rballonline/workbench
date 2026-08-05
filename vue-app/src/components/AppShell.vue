@@ -3,7 +3,9 @@
     <AppSidebar :current-page="currentPage" @navigate="navigate" />
 
     <v-app-bar border="b" density="comfortable" flat>
-      <v-app-bar-title class="text-subtitle-1">{{ t(`nav.${currentPage}`) }}</v-app-bar-title>
+      <v-app-bar-title class="text-subtitle-1">{{
+        t(`nav.${currentPage}`)
+      }}</v-app-bar-title>
 
       <template #append>
         <LiveStatusChip class="mr-2" />
@@ -12,7 +14,11 @@
         <v-btn
           :aria-label="t('common.toggleTheme')"
           density="comfortable"
-          :icon="userStore.theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+          :icon="
+            userStore.theme === 'light'
+              ? 'mdi-weather-night'
+              : 'mdi-weather-sunny'
+          "
           variant="text"
           @click="userStore.toggleTheme()"
         />
@@ -24,7 +30,10 @@
         <component :is="currentPageComponent" @navigate="navigate" />
 
         <template #fallback>
-          <div class="d-flex justify-center align-center" style="min-height: 200px">
+          <div
+            class="d-flex justify-center align-center"
+            style="min-height: 200px"
+          >
             <v-progress-circular color="primary" indeterminate />
           </div>
         </template>
@@ -35,7 +44,13 @@
 
 <script setup lang="ts">
   import { isDestinationEvent } from '@shared/types'
-  import { computed, defineAsyncComponent, onMounted, onUnmounted, watch } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    onMounted,
+    onUnmounted,
+    watch,
+  } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { provideAppContext } from '@/composables/useAppContext'
   import { DEFAULT_PAGE, useAppNav } from '@/composables/useAppNav'
@@ -57,7 +72,7 @@
   const issStore = useIssStore()
 
   const PAGE_COMPONENTS = {
-    welcome: defineAsyncComponent(() => import('./pages/WelcomePage.vue')),
+    home: defineAsyncComponent(() => import('./pages/HomePage.vue')),
     wishlist: defineAsyncComponent(() => import('./pages/WishlistPage.vue')),
     explore: defineAsyncComponent(() => import('./pages/ExplorePage.vue')),
     weather: defineAsyncComponent(() => import('./pages/WeatherPage.vue')),
@@ -68,14 +83,19 @@
   } as const
 
   const currentPageComponent = computed(
-    () => PAGE_COMPONENTS[currentPage.value as keyof typeof PAGE_COMPONENTS] ?? PAGE_COMPONENTS[DEFAULT_PAGE],
+    () =>
+      PAGE_COMPONENTS[currentPage.value as keyof typeof PAGE_COMPONENTS]
+      ?? PAGE_COMPONENTS[DEFAULT_PAGE],
   )
 
   // The locale the user picked last session; applied once Pinia has rehydrated.
   locale.value = userStore.locale
-  watch(() => userStore.locale, next => {
-    locale.value = next
-  })
+  watch(
+    () => userStore.locale,
+    next => {
+      locale.value = next
+    },
+  )
 
   // The shell owns the single socket and fans frames out to the stores, so no page
   // has to care whether the connection already exists.
@@ -91,13 +111,13 @@
     destinationsStore.load()
   })
 
-  // The socket itself is intentionally left open — it is a module-level singleton
+  // The socket itself is intentionally left open - it is a module-level singleton
   // shared across the app's lifetime, not owned by this component.
   onUnmounted(() => unsubscribe?.())
 </script>
 
 <style scoped>
-  .bg-surface-variant-subtle {
-    background: rgba(var(--v-theme-on-surface), 0.03);
-  }
+.bg-surface-variant-subtle {
+	background: rgba(var(--v-theme-on-surface), 0.03);
+}
 </style>

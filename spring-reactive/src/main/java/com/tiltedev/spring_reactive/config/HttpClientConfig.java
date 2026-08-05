@@ -12,7 +12,7 @@ import java.time.Duration;
 @Data
 @Component
 @ConfigurationProperties(prefix = "app.http-client")
-public class HttpClientProperties {
+public class HttpClientConfig {
 
     /** Per-attempt request timeout. Each retry attempt gets a fresh timeout. */
     private Duration timeout = Duration.ofSeconds(10);
@@ -22,10 +22,15 @@ public class HttpClientProperties {
     @Data
     public static class RetryProperties {
 
-        /** Master switch — when false, a failed call propagates on the first attempt. */
+        /**
+         * Master switch - when false, a failed call propagates on the first attempt.
+         */
         private boolean enabled = true;
 
-        /** Retries attempted <em>after</em> the initial call. 2 means up to 3 total calls. */
+        /**
+         * Retries attempted <em>after</em> the initial call. 2 means up to 3 total
+         * calls.
+         */
         private int maxRetries = 2;
 
         /** Delay before the first retry; doubles on each subsequent retry. */

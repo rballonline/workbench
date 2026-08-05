@@ -48,7 +48,7 @@
     {
       dividerAfter: true,
       items: [
-        { page: 'welcome', icon: 'mdi-home-outline' },
+        { page: 'home', icon: 'mdi-home-outline' },
       ],
     },
     {

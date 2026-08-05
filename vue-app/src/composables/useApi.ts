@@ -18,7 +18,11 @@ export class ApiError extends Error {
   readonly status: number
   readonly fieldErrors?: Record<string, string>
 
-  constructor (status: number, message: string, fieldErrors?: Record<string, string>) {
+  constructor (
+    status: number,
+    message: string,
+    fieldErrors?: Record<string, string>,
+  ) {
     super(message)
     this.name = 'ApiError'
     this.status = status
@@ -54,7 +58,10 @@ export function classifyError (error: unknown): ApiFailure {
     }
     return { kind: 'other', detail: error.message }
   }
-  return { kind: 'other', detail: error instanceof Error ? error.message : String(error) }
+  return {
+    kind: 'other',
+    detail: error instanceof Error ? error.message : String(error),
+  }
 }
 
 export function useApi () {
@@ -73,18 +80,26 @@ export function useApi () {
     } catch (error) {
       // fetch only rejects on network-level failure; surface it as a 0 so callers
       // can treat "backend not running" the same as any other API error.
-      throw new ApiError(0, error instanceof Error ? error.message : 'Network request failed')
+      throw new ApiError(
+        0,
+        error instanceof Error ? error.message : 'Network request failed',
+      )
     }
 
     if (!res.ok) {
-      const problem = await res.json().catch(() => null) as ProblemDetail | null
+      const problem = (await res
+        .json()
+        .catch(() => null)) as ProblemDetail | null
 
       // `GlobalExceptionHandler` answers every error with a ProblemDetail body, so a
-      // 5xx carrying no JSON did not come from the app — it is the dev proxy (or a
+      // 5xx carrying no JSON did not come from the app - it is the dev proxy (or a
       // gateway) reporting that it could not reach it. Report that as unreachable,
       // which is the actionable message.
       if (!problem && res.status >= 500) {
-        throw new ApiError(0, `HTTP ${res.status} with no problem detail — backend unreachable`)
+        throw new ApiError(
+          0,
+          `HTTP ${res.status} with no problem detail - backend unreachable`,
+        )
       }
 
       throw new ApiError(
@@ -108,10 +123,13 @@ export function useApi () {
     listDestinations: () => getJson<Destination[]>('/api/destinations'),
 
     // GET /api/destinations/{id}
-    getDestination: (id: number) => getJson<Destination>(`/api/destinations/${id}`),
+    getDestination: (id: number) =>
+      getJson<Destination>(`/api/destinations/${id}`),
 
     // POST /api/destinations
-    addDestination: async (body: AddDestinationRequest): Promise<Destination> => {
+    addDestination: async (
+      body: AddDestinationRequest,
+    ): Promise<Destination> => {
       const res = await apiFetch('/api/destinations', {
         method: 'POST',
         body: JSON.stringify(body),
@@ -119,14 +137,16 @@ export function useApi () {
       return res.json() as Promise<Destination>
     },
 
-    // DELETE /api/destinations/{id} — 204, no body
+    // DELETE /api/destinations/{id} - 204, no body
     deleteDestination: async (id: number): Promise<void> => {
       await apiFetch(`/api/destinations/${id}`, { method: 'DELETE' })
     },
 
-    // GET /api/cities/search?q= — backend requires 2..100 chars
+    // GET /api/cities/search?q= - backend requires 2..100 chars
     searchCities: (q: string) =>
-      getJson<CitySearchResult[]>(`/api/cities/search?q=${encodeURIComponent(q)}`),
+      getJson<CitySearchResult[]>(
+        `/api/cities/search?q=${encodeURIComponent(q)}`,
+      ),
 
     // GET /api/weather/city/{cityName}
     getWeather: (cityName: string) =>

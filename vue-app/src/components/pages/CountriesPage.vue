@@ -1,7 +1,10 @@
 <template>
   <div class="pa-6 pa-sm-8" style="max-width: 900px">
-    <div class="text-h6 mb-1">{{ t('countries.heading') }}</div>
-    <p class="text-body-2 text-medium-emphasis mb-6">{{ t('countries.intro') }}</p>
+    <div class="text-h6 mb-1">{{ t("countries.heading") }}</div>
+
+    <p class="text-body-2 text-medium-emphasis mb-6">
+      {{ t("countries.intro") }}
+    </p>
 
     <v-card class="mb-6" elevation="1">
       <v-card-text class="pa-4">
@@ -23,14 +26,19 @@
               variant="tonal"
               @click="lookup"
             >
-              {{ t('common.search') }}
+              {{ t("common.search") }}
             </v-btn>
           </template>
         </v-text-field>
 
-        <div v-if="wishlistCountries.length > 0" class="d-flex flex-wrap ga-2 mt-4">
-          <span class="text-caption text-medium-emphasis align-self-center mr-1">
-            {{ t('countries.fromWishlist') }}
+        <div
+          v-if="wishlistCountries.length > 0"
+          class="d-flex flex-wrap ga-2 mt-4"
+        >
+          <span
+            class="text-caption text-medium-emphasis align-self-center mr-1"
+          >
+            {{ t("countries.fromWishlist") }}
           </span>
 
           <v-chip
@@ -67,12 +75,16 @@
           <div class="text-h6 mb-1">{{ commonName }}</div>
 
           <div class="text-caption text-medium-emphasis mb-4">
-            {{ country.cca2?.[0] ?? '—' }} · {{ country.region ?? t('countries.unknownRegion') }}
+            {{ country.cca2?.[0] ?? "-" }} ·
+            {{ country.region ?? t("countries.unknownRegion") }}
           </div>
 
           <v-row dense>
             <v-col v-for="fact in facts" :key="fact.labelKey" cols="12" sm="6">
-              <div class="text-caption text-medium-emphasis">{{ t(fact.labelKey) }}</div>
+              <div class="text-caption text-medium-emphasis">
+                {{ t(fact.labelKey) }}
+              </div>
+
               <div class="text-body-2">{{ fact.value }}</div>
             </v-col>
           </v-row>
@@ -82,7 +94,9 @@
       <v-divider />
 
       <v-card-text class="py-3">
-        <span class="text-caption text-medium-emphasis">{{ t('countries.passthroughNote') }}</span>
+        <span class="text-caption text-medium-emphasis">{{
+          t("countries.passthroughNote")
+        }}</span>
       </v-card-text>
     </v-card>
   </div>
@@ -107,8 +121,13 @@
   /** Held separately so a 404 message keeps naming the term that actually failed. */
   const lastQueried = ref('')
 
-  const wishlistCountries = computed(() =>
-    [...new Set(destinationsStore.items.map(d => d.country?.name).filter(Boolean))] as string[],
+  const wishlistCountries = computed(
+    () =>
+      [
+        ...new Set(
+          destinationsStore.items.map(d => d.country?.name).filter(Boolean),
+        ),
+      ] as string[],
   )
 
   // `/api/countries/{name}` returns the raw REST Countries shape, where the display
@@ -118,22 +137,25 @@
   const facts = computed(() => [
     {
       labelKey: 'countries.capital',
-      value: country.value?.capital?.[0] ?? '—',
+      value: country.value?.capital?.[0] ?? '-',
     },
     {
       labelKey: 'countries.population',
-      value: country.value?.population == null
-        ? '—'
-        : new Intl.NumberFormat(locale.value).format(country.value.population),
+      value:
+        country.value?.population == null
+          ? '-'
+          : new Intl.NumberFormat(locale.value).format(country.value.population),
     },
     {
       labelKey: 'countries.region',
-      value: country.value?.region ?? '—',
+      value: country.value?.region ?? '-',
     },
     {
       labelKey: 'countries.onWishlist',
       value: String(
-        destinationsStore.items.filter(d => d.country?.name === commonName.value).length,
+        destinationsStore.items.filter(
+          d => d.country?.name === commonName.value,
+        ).length,
       ),
     },
   ])

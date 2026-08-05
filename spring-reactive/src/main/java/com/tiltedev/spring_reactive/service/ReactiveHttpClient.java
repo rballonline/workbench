@@ -1,6 +1,6 @@
-package com.tiltedev.spring_reactive.client;
+package com.tiltedev.spring_reactive.service;
 
-import com.tiltedev.spring_reactive.config.HttpClientProperties;
+import com.tiltedev.spring_reactive.config.HttpClientConfig;
 import com.tiltedev.spring_reactive.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.context.ContextView;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
@@ -28,70 +29,95 @@ public class ReactiveHttpClient {
 
     private static final Set<String> IDEMPOTENT_METHODS = Set.of("GET", "PUT", "DELETE");
 
-    private final HttpClientProperties properties;
+    /**
+     * Reactor Context key
+     * {@link com.tiltedev.spring_reactive.controller.RequestLoggingFilter} writes
+     * the inbound request id under.
+     */
+    public static final String REQUEST_ID_CONTEXT_KEY = "requestId";
+
+    private final HttpClientConfig properties;
 
     public <T> Mono<T> get(WebClient client, String path, Class<T> responseType,
             Consumer<UriBuilder> uriQueryParams) {
-        String requestId = generateRequestId();
-        return execute("GET", path, requestId,
-                build(client, requestId),
-                c -> c.get().uri(uriBuilder -> {
-                    uriQueryParams.accept(uriBuilder.path(path));
-                    return uriBuilder.build();
-                }).retrieve(),
-                responseType);
+        return Mono.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return execute("GET", path, requestId,
+                    build(client, requestId),
+                    c -> c.get().uri(uriBuilder -> {
+                        uriQueryParams.accept(uriBuilder.path(path));
+                        return uriBuilder.build();
+                    }).retrieve(),
+                    responseType);
+        });
     }
 
     public <T> Flux<T> getFlux(WebClient client, String path, Class<T> responseType,
             Consumer<UriBuilder> uriQueryParams) {
-        String requestId = generateRequestId();
-        return executeFlux("GET", path, requestId,
-                build(client, requestId),
-                c -> c.get().uri(uriBuilder -> {
-                    uriQueryParams.accept(uriBuilder.path(path));
-                    return uriBuilder.build();
-                }).retrieve(),
-                responseType);
+        return Flux.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return executeFlux("GET", path, requestId,
+                    build(client, requestId),
+                    c -> c.get().uri(uriBuilder -> {
+                        uriQueryParams.accept(uriBuilder.path(path));
+                        return uriBuilder.build();
+                    }).retrieve(),
+                    responseType);
+        });
     }
 
     public <B, T> Mono<T> post(WebClient client, String path, B body, Class<T> responseType) {
-        String requestId = generateRequestId();
-        return execute("POST", path, requestId,
-                build(client, requestId),
-                c -> c.post().uri(path).bodyValue(body).retrieve(),
-                responseType);
+        return Mono.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return execute("POST", path, requestId,
+                    build(client, requestId),
+                    c -> c.post().uri(path).bodyValue(body).retrieve(),
+                    responseType);
+        });
     }
 
     public <B, T> Flux<T> postFlux(WebClient client, String path, B body, Class<T> responseType) {
-        String requestId = generateRequestId();
-        return executeFlux("POST", path, requestId,
-                build(client, requestId),
-                c -> c.post().uri(path).bodyValue(body).retrieve(),
-                responseType);
+        return Flux.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return executeFlux("POST", path, requestId,
+                    build(client, requestId),
+                    c -> c.post().uri(path).bodyValue(body).retrieve(),
+                    responseType);
+        });
     }
 
     public <B, T> Mono<T> put(WebClient client, String path, B body, Class<T> responseType) {
-        String requestId = generateRequestId();
-        return execute("PUT", path, requestId,
-                build(client, requestId),
-                c -> c.put().uri(path).bodyValue(body).retrieve(),
-                responseType);
+        return Mono.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return execute("PUT", path, requestId,
+                    build(client, requestId),
+                    c -> c.put().uri(path).bodyValue(body).retrieve(),
+                    responseType);
+        });
     }
 
     public <B, T> Flux<T> putFlux(WebClient client, String path, B body, Class<T> responseType) {
-        String requestId = generateRequestId();
-        return executeFlux("PUT", path, requestId,
-                build(client, requestId),
-                c -> c.put().uri(path).bodyValue(body).retrieve(),
-                responseType);
+        return Flux.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return executeFlux("PUT", path, requestId,
+                    build(client, requestId),
+                    c -> c.put().uri(path).bodyValue(body).retrieve(),
+                    responseType);
+        });
     }
 
     public Mono<Void> delete(WebClient client, String path) {
-        String requestId = generateRequestId();
-        return execute("DELETE", path, requestId,
-                build(client, requestId),
-                c -> c.delete().uri(path).retrieve(),
-                Void.class);
+        return Mono.deferContextual(ctx -> {
+            String requestId = resolveRequestId(ctx);
+            return execute("DELETE", path, requestId,
+                    build(client, requestId),
+                    c -> c.delete().uri(path).retrieve(),
+                    Void.class);
+        });
+    }
+
+    private static String resolveRequestId(ContextView ctx) {
+        return ctx.<String>getOrEmpty(REQUEST_ID_CONTEXT_KEY).orElseGet(ReactiveHttpClient::generateRequestId);
     }
 
     private WebClient build(WebClient client, String requestId) {
@@ -111,8 +137,8 @@ public class ReactiveHttpClient {
                 .timeout(timeout,
                         Mono.error(new ApiTimeoutException(label,
                                 "Request timed out after " + timeout.toMillis() + "ms")))
-                .doOnSubscribe(s -> log.debug("[{}] → {} {}", requestId, method, path))
-                .doOnSuccess(r -> log.debug("[{}] ← {} {} success", requestId, method, path))
+                .doOnSubscribe(s -> log.debug("[{}] -> {} {}", requestId, method, path))
+                .doOnSuccess(r -> log.debug("[{}] <- {} {} success", requestId, method, path))
                 .onErrorMap(WebClientRequestException.class, e -> {
                     log.error("Connection failure {} {}: {}", method, path, e.getMessage());
                     return new ApiConnectionException(label, e.getMessage(), e);
@@ -123,9 +149,9 @@ public class ReactiveHttpClient {
                 })
                 .doOnError(ApiException.class, e -> {
                     if (e.getStatus() >= 500) {
-                        log.error("[{}] ← {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
+                        log.error("[{}] <- {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
                     } else {
-                        log.warn("[{}] ← {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
+                        log.warn("[{}] <- {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
                     }
                 })
                 .retryWhen(retrySpec(method, path, requestId, () -> true));
@@ -146,9 +172,9 @@ public class ReactiveHttpClient {
                     .timeout(timeout,
                             Flux.error(new ApiTimeoutException(label,
                                     "Request timed out after " + timeout.toMillis() + "ms")))
-                    .doOnSubscribe(s -> log.debug("[{}] → {} (flux) {}", requestId, method, path))
+                    .doOnSubscribe(s -> log.debug("[{}] -> {} (flux) {}", requestId, method, path))
                     .doOnNext(v -> emitted.set(true))
-                    .doOnComplete(() -> log.debug("[{}] ← {} (flux) {} complete", requestId, method, path))
+                    .doOnComplete(() -> log.debug("[{}] <- {} (flux) {} complete", requestId, method, path))
                     .onErrorMap(WebClientRequestException.class, e -> {
                         log.error("Connection failure {} {}: {}", method, path, e.getMessage());
                         return new ApiConnectionException(label, e.getMessage(), e);
@@ -159,9 +185,9 @@ public class ReactiveHttpClient {
                     })
                     .doOnError(ApiException.class, e -> {
                         if (e.getStatus() >= 500) {
-                            log.error("[{}] ← {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
+                            log.error("[{}] <- {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
                         } else {
-                            log.warn("[{}] ← {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
+                            log.warn("[{}] <- {} {} [{}]: {}", requestId, method, path, e.getStatus(), e.getMessage());
                         }
                     })
                     .retryWhen(retrySpec(method, path, requestId, () -> !emitted.get()));
@@ -178,7 +204,7 @@ public class ReactiveHttpClient {
      * {@code GlobalExceptionHandler} keep seeing the typed {@code ApiException}.
      */
     private Retry retrySpec(String method, String path, String requestId, BooleanSupplier stillRetryable) {
-        HttpClientProperties.RetryProperties cfg = properties.getRetry();
+        HttpClientConfig.RetryProperties cfg = properties.getRetry();
         int maxRetries = Math.max(0, cfg.getMaxRetries());
         return Retry.backoff(maxRetries, cfg.getInitialBackoff())
                 .maxBackoff(cfg.getMaxBackoff())
@@ -193,7 +219,7 @@ public class ReactiveHttpClient {
                 .onRetryExhaustedThrow((spec, signal) -> signal.failure());
     }
 
-    private static boolean isMethodRetryable(String method, HttpClientProperties.RetryProperties cfg) {
+    private static boolean isMethodRetryable(String method, HttpClientConfig.RetryProperties cfg) {
         return !cfg.isIdempotentOnly() || IDEMPOTENT_METHODS.contains(method);
     }
 
@@ -202,7 +228,7 @@ public class ReactiveHttpClient {
      * landed, the
      * call timed out, or the far side reported a server-side problem. 4xx responses
      * and
-     * malformed bodies are deterministic — retrying them just burns the budget.
+     * malformed bodies are deterministic - retrying them just burns the budget.
      */
     private static boolean isTransient(Throwable t) {
         if (t instanceof ApiConnectionException) {

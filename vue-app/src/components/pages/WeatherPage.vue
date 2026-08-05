@@ -1,7 +1,10 @@
 <template>
   <div class="pa-6 pa-sm-8" style="max-width: 900px">
-    <div class="text-h6 mb-1">{{ t('weather.heading') }}</div>
-    <p class="text-body-2 text-medium-emphasis mb-6">{{ t('weather.intro') }}</p>
+    <div class="text-h6 mb-1">{{ t("weather.heading") }}</div>
+
+    <p class="text-body-2 text-medium-emphasis mb-6">
+      {{ t("weather.intro") }}
+    </p>
 
     <v-card class="mb-6" elevation="1">
       <v-card-text class="pa-4">
@@ -22,14 +25,19 @@
               variant="tonal"
               @click="lookup"
             >
-              {{ t('common.search') }}
+              {{ t("common.search") }}
             </v-btn>
           </template>
         </v-text-field>
 
-        <div v-if="destinationsStore.count > 0" class="d-flex flex-wrap ga-2 mt-4">
-          <span class="text-caption text-medium-emphasis align-self-center mr-1">
-            {{ t('weather.fromWishlist') }}
+        <div
+          v-if="destinationsStore.count > 0"
+          class="d-flex flex-wrap ga-2 mt-4"
+        >
+          <span
+            class="text-caption text-medium-emphasis align-self-center mr-1"
+          >
+            {{ t("weather.fromWishlist") }}
           </span>
 
           <v-chip
@@ -72,20 +80,37 @@
             <div class="text-subtitle-1">{{ weather.cityName }}</div>
 
             <div class="text-caption text-medium-emphasis mb-2">
-              {{ weather.countryName ?? t('weather.unknownCountry') }} ·
-              {{ weather.latitude.toFixed(2) }}, {{ weather.longitude.toFixed(2) }}
+              {{ weather.countryName ?? t("weather.unknownCountry") }} ·
+              {{ weather.latitude.toFixed(2) }},
+              {{ weather.longitude.toFixed(2) }}
             </div>
 
             <div class="d-flex flex-wrap ga-2">
-              <v-chip prepend-icon="mdi-weather-windy" size="small" variant="tonal">
-                {{ weather.windSpeedKmh != null ? `${weather.windSpeedKmh.toFixed(0)} km/h` : '—' }}
+              <v-chip
+                prepend-icon="mdi-weather-windy"
+                size="small"
+                variant="tonal"
+              >
+                {{
+                  weather.windSpeedKmh != null
+                    ? `${weather.windSpeedKmh.toFixed(0)} km/h`
+                    : "-"
+                }}
               </v-chip>
 
-              <v-chip prepend-icon="mdi-water-percent" size="small" variant="tonal">
-                {{ weather.humidity != null ? `${weather.humidity}%` : '—' }}
+              <v-chip
+                prepend-icon="mdi-water-percent"
+                size="small"
+                variant="tonal"
+              >
+                {{ weather.humidity != null ? `${weather.humidity}%` : "-" }}
               </v-chip>
 
-              <v-chip prepend-icon="mdi-thermometer" size="small" variant="tonal">
+              <v-chip
+                prepend-icon="mdi-thermometer"
+                size="small"
+                variant="tonal"
+              >
                 {{ fahrenheit }}
               </v-chip>
             </div>
@@ -97,7 +122,7 @@
 
       <v-card-actions class="px-4 py-3">
         <span class="text-caption text-medium-emphasis">
-          {{ t('weather.chainNote') }}
+          {{ t("weather.chainNote") }}
         </span>
 
         <v-spacer />
@@ -109,7 +134,7 @@
           variant="text"
           @click="$emit('navigate', 'explore')"
         >
-          {{ t('explore.addToWishlist') }}
+          {{ t("explore.addToWishlist") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -124,7 +149,11 @@
   import { type ApiFailure, classifyError, useApi } from '@/composables/useApi'
   import { readPageParam } from '@/composables/useAppNav'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
-  import { describeWeatherCode, temperatureColor, toFahrenheit } from '@/utils/weatherCodes'
+  import {
+    describeWeatherCode,
+    temperatureColor,
+    toFahrenheit,
+  } from '@/utils/weatherCodes'
 
   defineEmits<{ navigate: [page: string, extra?: Record<string, string>] }>()
 
@@ -139,24 +168,29 @@
   /** Held separately so a 404 message keeps naming the term that actually failed. */
   const lastQueried = ref('')
 
-  const descriptor = computed(() => describeWeatherCode(weather.value?.weatherCode))
-  const tempColor = computed(() => temperatureColor(weather.value?.temperatureCelsius))
+  const descriptor = computed(() =>
+    describeWeatherCode(weather.value?.weatherCode),
+  )
+  const tempColor = computed(() =>
+    temperatureColor(weather.value?.temperatureCelsius),
+  )
 
   const temperature = computed(() =>
     weather.value?.temperatureCelsius == null
-      ? '—'
+      ? '-'
       : `${weather.value.temperatureCelsius.toFixed(1)}°C`,
   )
 
   const fahrenheit = computed(() =>
     weather.value?.temperatureCelsius == null
-      ? '—'
+      ? '-'
       : `${toFahrenheit(weather.value.temperatureCelsius).toFixed(1)}°F`,
   )
 
-  const onWishlist = computed(() =>
-    weather.value != null
-    && destinationsStore.items.some(d => d.cityName === weather.value?.cityName),
+  const onWishlist = computed(
+    () =>
+      weather.value != null
+      && destinationsStore.items.some(d => d.cityName === weather.value?.cityName),
   )
 
   async function lookup () {

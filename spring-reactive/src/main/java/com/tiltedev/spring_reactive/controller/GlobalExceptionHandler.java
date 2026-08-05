@@ -1,7 +1,6 @@
 package com.tiltedev.spring_reactive.controller;
 
 import com.tiltedev.spring_reactive.exception.*;
-import com.tiltedev.spring_reactive.filter.RequestLoggingFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -24,8 +23,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toMap(
                         f -> f.getField(),
                         f -> f.getDefaultMessage() != null ? f.getDefaultMessage() : "invalid",
-                        (a, b) -> a
-                ));
+                        (a, b) -> a));
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
         detail.setProperty("errors", fieldErrors);
         return Mono.just(detail);
@@ -48,26 +46,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiTimeoutException.class)
     public Mono<ProblemDetail> handleTimeout(ApiTimeoutException ex, ServerWebExchange exchange) {
-        log.error("Request Id: {}, Upstream timeout: {}", requestId(exchange), ex.getMessage());
+        log.error("[{}], Upstream timeout: {}", requestId(exchange), ex.getMessage());
         return Mono.just(ProblemDetail.forStatusAndDetail(HttpStatus.GATEWAY_TIMEOUT, "Upstream request timed out"));
     }
 
-    @ExceptionHandler({ApiConnectionException.class, ApiUnavailableException.class, ApiIncompleteResponseException.class})
+    @ExceptionHandler({ ApiConnectionException.class, ApiUnavailableException.class,
+            ApiIncompleteResponseException.class })
     public Mono<ProblemDetail> handleUpstreamFailure(RuntimeException ex, ServerWebExchange exchange) {
-        log.error("Request Id: {}, Upstream failure: {}", requestId(exchange), ex.getMessage());
+        log.error("[{}], Upstream failure: {}", requestId(exchange), ex.getMessage());
         return Mono.just(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, "Upstream service unavailable"));
     }
 
     @ExceptionHandler(ApiServerException.class)
     public Mono<ProblemDetail> handleApiServer(ApiServerException ex, ServerWebExchange exchange) {
-        log.error("Request Id: {}, Upstream server error [{}]: {}", requestId(exchange), ex.getStatus(), ex.getMessage());
+        log.error("[{}], Upstream server error [{}]: {}", requestId(exchange), ex.getStatus(), ex.getMessage());
         return Mono.just(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Upstream server error"));
     }
 
     @ExceptionHandler(Exception.class)
     public Mono<ProblemDetail> handleGeneric(Exception ex, ServerWebExchange exchange) {
-        log.error("Request Id: {}, Unhandled exception: {}", requestId(exchange), ex.getMessage(), ex);
-        return Mono.just(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
+        log.error("[{}] Unhandled exception: {}", requestId(exchange), ex.getMessage(), ex);
+        return Mono.just(
+                ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
     }
 
     private String requestId(ServerWebExchange exchange) {

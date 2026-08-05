@@ -38,3 +38,6 @@ out/
 
 ### Local config (secrets) ###
 src/main/resources/application-local.yml
+
+### Local log output ###
+logs/

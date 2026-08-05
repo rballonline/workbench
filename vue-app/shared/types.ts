@@ -1,6 +1,6 @@
 /**
  * Mirrors the DTOs in `spring-reactive/src/main/java/com/tiltedev/spring_reactive/dto/`.
- * Keep these in sync by hand — there is no codegen step.
+ * Keep these in sync by hand - there is no codegen step.
  */
 
 /** `dto/response/CountryResponse` */
@@ -13,7 +13,7 @@ export interface Country {
   flagUrl: string | null
 }
 
-/** `dto/response/DestinationResponse` — GET /api/destinations */
+/** `dto/response/DestinationResponse` - GET /api/destinations */
 export interface Destination {
   id: number
   cityName: string
@@ -24,7 +24,7 @@ export interface Destination {
   country: Country
 }
 
-/** `dto/request/AddDestinationRequest` — POST /api/destinations */
+/** `dto/request/AddDestinationRequest` - POST /api/destinations */
 export interface AddDestinationRequest {
   cityName: string
   countryCode: string
@@ -33,7 +33,7 @@ export interface AddDestinationRequest {
   addedBy?: string
 }
 
-/** `dto/response/CitySearchResponse` — GET /api/cities/search?q= */
+/** `dto/response/CitySearchResponse` - GET /api/cities/search?q= */
 export interface CitySearchResult {
   cityName: string
   latitude: number
@@ -45,7 +45,7 @@ export interface CitySearchResult {
   flagUrl: string | null
 }
 
-/** `dto/response/WeatherResponse` — GET /api/weather/city/{cityName} */
+/** `dto/response/WeatherResponse` - GET /api/weather/city/{cityName} */
 export interface Weather {
   cityName: string
   countryName: string | null
@@ -57,7 +57,7 @@ export interface Weather {
   weatherCode: number | null
 }
 
-/** `dto/response/IssResponse` — GET /api/iss, and pushed over the WebSocket */
+/** `dto/response/IssResponse` - GET /api/iss, and pushed over the WebSocket */
 export interface IssPosition {
   latitude: number
   longitude: number
@@ -66,7 +66,7 @@ export interface IssPosition {
 }
 
 /**
- * `dto/result/CountryApiResult` — GET /api/countries/{name}.
+ * `dto/result/CountryApiResult` - GET /api/countries/{name}.
  * This one is the raw REST Countries shape passed straight through by
  * `CountryController`, so it is shaped differently from `CountryResponse`.
  */
@@ -80,7 +80,7 @@ export interface CountryApiResult {
 }
 
 /**
- * `dto/event/DestinationEvent` — WebSocket payload.
+ * `dto/event/DestinationEvent` - WebSocket payload.
  * Note the nested object is the raw `model/Destination` entity, not the enriched
  * `DestinationResponse`: it carries `countryCode` but no nested `country`.
  */

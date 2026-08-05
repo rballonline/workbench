@@ -17,7 +17,7 @@
     }
   },
   "nav": {
-    "welcome": "Inicio",
+    "home": "Inicio",
     "wishlist": "Lista",
     "explore": "Explorar",
     "weather": "Clima",
@@ -31,9 +31,9 @@
       "live": "En vivo"
     }
   },
-  "welcome": {
-    "heading": "Bienvenido",
-    "intro": "Una lista compartida de lugares que vale la pena visitar. Todo lo que ves viene del backend spring-reactive, y los destinos nuevos llegan por WebSocket en cuanto alguien los añade.",
+  "home": {
+    "heading": "Inicio",
+    "intro": "Esto no es un producto real - es una muestra de cómo diseño una aplicación full-stack, combinando este cliente Vue 3 + TypeScript con un backend reactivo en Spring WebFlux. Cada página siguiente demuestra una técnica distinta.",
     "byRegion": "Destinos por región",
     "stats": {
       "destinations": "Destinos",
@@ -42,12 +42,12 @@
       "stream": "Flujo en vivo"
     },
     "cards": {
-      "wishlist": "Consulta la lista compartida, añade lugares y quita los que ya visitaste.",
-      "explore": "Busca ciudades del mundo y añade las mejores a la lista.",
-      "weather": "Condiciones actuales de cualquier ciudad, geocodificada en el camino.",
-      "countries": "Bandera, capital, región y población de cualquier país.",
-      "iss": "Observa la Estación Espacial Internacional cruzar el mapa.",
-      "live": "El flujo WebSocket sin procesar, tal como lo envía el backend."
+      "wishlist": "CRUD completo sobre una API REST reactiva, sincronizado con Pinia y eventos WebSocket en vivo.",
+      "explore": "Búsqueda con debounce que encadena dos APIs externas en una sola respuesta del backend.",
+      "weather": "Dos llamadas externas secuenciales: geocodifica la ciudad y luego obtiene su pronóstico.",
+      "countries": "Un proxy directo - la respuesta de una API externa, reenviada tal cual.",
+      "iss": "Sondeo del lado del servidor, empujado a los clientes por un WebSocket compartido.",
+      "live": "El flujo WebSocket combinado, sin procesar, tal como lo emite el backend."
     }
   },
   "wishlist": {

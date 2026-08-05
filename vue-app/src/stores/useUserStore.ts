@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 /**
- * Identity is client-side only — `AddDestinationRequest.addedBy` is a free-text field
+ * Identity is client-side only - `AddDestinationRequest.addedBy` is a free-text field
  * with no auth behind it, so this is just a remembered display name.
  */
 export const useUserStore = defineStore('userStore', {
@@ -14,7 +14,9 @@ export const useUserStore = defineStore('userStore', {
   getters: {
     /** What to send as `addedBy`; the backend caps it at 100 chars. */
     attribution: (state): string | undefined =>
-      state.displayName.trim() ? state.displayName.trim().slice(0, 100) : undefined,
+      state.displayName.trim()
+        ? state.displayName.trim().slice(0, 100)
+        : undefined,
 
     hasName: state => state.displayName.trim().length > 0,
   },

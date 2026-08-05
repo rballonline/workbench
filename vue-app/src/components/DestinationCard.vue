@@ -2,7 +2,10 @@
   <v-card class="h-100 d-flex flex-column" elevation="1">
     <div class="d-flex align-center ga-3 pa-4 pb-2">
       <v-avatar v-if="destination.country?.flagUrl" rounded="sm" size="40">
-        <v-img :alt="destination.country.name" :src="destination.country.flagUrl" />
+        <v-img
+          :alt="destination.country.name"
+          :src="destination.country.flagUrl"
+        />
       </v-avatar>
 
       <v-avatar v-else color="surface-variant" rounded="sm" size="40">
@@ -10,22 +13,29 @@
       </v-avatar>
 
       <div class="flex-grow-1 min-width-0">
-        <div class="text-subtitle-1 text-truncate">{{ destination.cityName }}</div>
+        <div class="text-subtitle-1 text-truncate">
+          {{ destination.cityName }}
+        </div>
 
         <div class="text-caption text-medium-emphasis text-truncate">
           {{ destination.country?.name ?? destination.country?.code }}
-          <template v-if="destination.country?.region"> · {{ destination.country.region }}</template>
+          <template v-if="destination.country?.region">
+            · {{ destination.country.region }}</template>
         </div>
       </div>
 
       <v-chip v-if="isNew" color="success" size="x-small" variant="tonal">
-        {{ t('wishlist.justAdded') }}
+        {{ t("wishlist.justAdded") }}
       </v-chip>
     </div>
 
     <v-card-text class="pt-1 pb-2 flex-grow-1">
       <div class="d-flex flex-wrap ga-2 mb-3">
-        <v-chip prepend-icon="mdi-crosshairs-gps" size="x-small" variant="outlined">
+        <v-chip
+          prepend-icon="mdi-crosshairs-gps"
+          size="x-small"
+          variant="outlined"
+        >
           {{ coordinates }}
         </v-chip>
 
@@ -49,9 +59,14 @@
       </div>
 
       <div class="text-caption text-medium-emphasis">
-        {{ destination.addedBy
-          ? t('wishlist.addedByOn', { name: destination.addedBy, date: addedOn })
-          : t('wishlist.addedOn', { date: addedOn }) }}
+        {{
+          destination.addedBy
+            ? t("wishlist.addedByOn", {
+              name: destination.addedBy,
+              date: addedOn
+            })
+            : t("wishlist.addedOn", { date: addedOn })
+        }}
       </div>
     </v-card-text>
 
@@ -62,7 +77,7 @@
         variant="text"
         @click="$emit('weather', destination)"
       >
-        {{ t('wishlist.checkWeather') }}
+        {{ t("wishlist.checkWeather") }}
       </v-btn>
 
       <v-spacer />
@@ -85,7 +100,10 @@
   import { useI18n } from 'vue-i18n'
 
   const props = defineProps<{ destination: Destination, isNew?: boolean }>()
-  defineEmits<{ remove: [destination: Destination], weather: [destination: Destination] }>()
+  defineEmits<{
+    remove: [destination: Destination]
+    weather: [destination: Destination]
+  }>()
 
   const { t, locale } = useI18n()
 
@@ -95,21 +113,24 @@
   })
 
   const population = computed(() =>
-    new Intl.NumberFormat(locale.value, { notation: 'compact' })
-      .format(props.destination.country?.population ?? 0),
+    new Intl.NumberFormat(locale.value, { notation: 'compact' }).format(
+      props.destination.country?.population ?? 0,
+    ),
   )
 
   const addedOn = computed(() => {
     // Spring serializes LocalDateTime without a zone; treat it as local time.
     const parsed = new Date(props.destination.createdAt)
     return Number.isNaN(parsed.getTime())
-      ? '—'
-      : new Intl.DateTimeFormat(locale.value, { dateStyle: 'medium' }).format(parsed)
+      ? '-'
+      : new Intl.DateTimeFormat(locale.value, { dateStyle: 'medium' }).format(
+        parsed,
+      )
   })
 </script>
 
 <style scoped>
-  .min-width-0 {
-    min-width: 0;
-  }
+.min-width-0 {
+	min-width: 0;
+}
 </style>

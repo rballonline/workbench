@@ -1,4 +1,8 @@
-import type { AddDestinationRequest, Destination, DestinationEvent } from '@shared/types'
+import type {
+  AddDestinationRequest,
+  Destination,
+  DestinationEvent,
+} from '@shared/types'
 import { defineStore } from 'pinia'
 import { type ApiFailure, classifyError, useApi } from '@/composables/useApi'
 
@@ -16,16 +20,16 @@ export const useDestinationsStore = defineStore('destinationsStore', {
   getters: {
     count: state => state.items.length,
 
-    /** Newest first — the backend returns insertion order. */
+    /** Newest first - the backend returns insertion order. */
     sorted: state =>
       state.items.toSorted((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
 
-    /** `{ [region]: Destination[] }`, for the breakdown on the welcome page. */
+    /** `{ [region]: Destination[] }`, for the breakdown on the home page. */
     byRegion: state => {
       const groups: Record<string, Destination[]> = {}
       for (const d of state.items) {
-        const region = d.country?.region ?? 'Unknown'
-        ;(groups[region] ??= []).push(d)
+        const region = d.country?.region ?? 'Unknown';
+        (groups[region] ??= []).push(d)
       }
       return groups
     },
@@ -80,10 +84,10 @@ export const useDestinationsStore = defineStore('destinationsStore', {
     },
 
     /**
-     * Fold a WebSocket event into the list. The event carries the raw entity, which
-     * has `countryCode` but no nested `country`, so a create is refetched by id to
-     * pick up the joined country row the list renders.
-     */
+		 * Fold a WebSocket event into the list. The event carries the raw entity, which
+		 * has `countryCode` but no nested `country`, so a create is refetched by id to
+		 * pick up the joined country row the list renders.
+		 */
     async applyEvent (event: DestinationEvent) {
       const { id } = event.destination
 

@@ -1,21 +1,23 @@
 import { onUnmounted, ref } from 'vue'
 
-export const DEFAULT_PAGE = 'welcome'
+export const DEFAULT_PAGE = 'home'
 
 /** Query params owned by a page, cleared whenever navigation leaves that page. */
 const PAGE_PARAMS = ['city', 'country'] as const
 
 /**
- * No Vue Router — the page lives in `?page=` and is swapped with `history.pushState`,
+ * No Vue Router - the page lives in `?page=` and is swapped with `history.pushState`,
  * which preserves any other query params (notably `?api=`, read by `useAppContext`).
  */
 export function useAppNav () {
-  const currentPage = ref(new URLSearchParams(window.location.search).get('page') ?? DEFAULT_PAGE)
+  const currentPage = ref(
+    new URLSearchParams(window.location.search).get('page') ?? DEFAULT_PAGE,
+  )
 
   /**
-   * `extra` seeds page-scoped params — e.g. `navigate('weather', { city: 'Tokyo' })`
-   * hands the destination straight to the weather page.
-   */
+	 * `extra` seeds page-scoped params - e.g. `navigate('weather', { city: 'Tokyo' })`
+	 * hands the destination straight to the weather page.
+	 */
   function navigate (page: string, extra?: Record<string, string>) {
     const params = new URLSearchParams(window.location.search)
     params.set('page', page)
@@ -31,7 +33,8 @@ export function useAppNav () {
   }
 
   function onPopState () {
-    currentPage.value = new URLSearchParams(window.location.search).get('page') ?? DEFAULT_PAGE
+    currentPage.value
+      = new URLSearchParams(window.location.search).get('page') ?? DEFAULT_PAGE
   }
 
   window.addEventListener('popstate', onPopState)
@@ -41,6 +44,8 @@ export function useAppNav () {
 }
 
 /** Read a page-scoped param, for pages that can be deep-linked into. */
-export function readPageParam (key: (typeof PAGE_PARAMS)[number]): string | null {
+export function readPageParam (
+  key: (typeof PAGE_PARAMS)[number],
+): string | null {
   return new URLSearchParams(window.location.search).get(key)
 }

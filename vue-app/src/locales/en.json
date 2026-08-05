@@ -1,195 +1,195 @@
 {
-  "app": {
-    "title": "Places I'd Like to Visit",
-    "subtitle": "Collaborative travel wishlist"
-  },
-  "common": {
-    "cancel": "Cancel",
-    "remove": "Remove",
-    "search": "Search",
-    "language": "Language",
-    "toggleTheme": "Toggle light/dark theme",
-    "errors": {
-      "unreachable": "Cannot reach the API — is the Spring app running on port 8080?",
-      "notFound": "Not found.",
-      "validation": "The backend rejected the request.",
-      "other": "Something went wrong."
-    }
-  },
-  "nav": {
-    "welcome": "Welcome",
-    "wishlist": "Wishlist",
-    "explore": "Explore",
-    "weather": "Weather",
-    "countries": "Countries",
-    "iss": "ISS Tracker",
-    "live": "Live Feed",
-    "settings": "Settings",
-    "sections": {
-      "plan": "Plan",
-      "lookup": "Look up",
-      "live": "Live"
-    }
-  },
-  "welcome": {
-    "heading": "Welcome",
-    "intro": "A shared list of places worth visiting. Everything here is served by the spring-reactive backend, and new destinations arrive over a WebSocket the moment anyone adds one.",
-    "byRegion": "Destinations by region",
-    "stats": {
-      "destinations": "Destinations",
-      "countries": "Countries",
-      "contributors": "Contributors",
-      "stream": "Live stream"
-    },
-    "cards": {
-      "wishlist": "Browse the shared list, add places, and remove ones you've been to.",
-      "explore": "Search the world's cities and add the good ones to the list.",
-      "weather": "Current conditions for any city, geocoded on the way through.",
-      "countries": "Flag, capital, region, and population for any country.",
-      "iss": "Watch the International Space Station move across the map.",
-      "live": "The raw WebSocket feed, exactly as the backend pushes it."
-    }
-  },
-  "wishlist": {
-    "heading": "Wishlist",
-    "intro": "Every place on the shared list. Additions and removals from other browsers show up here without a refresh.",
-    "add": "Add destination",
-    "addTitle": "Add a destination",
-    "gridView": "Grid view",
-    "mapView": "Map view",
-    "mapLabel": "World map of wishlist destinations",
-    "mapCaption": "{count} destinations plotted on an equirectangular projection.",
-    "emptyTitle": "Nothing on the list yet",
-    "emptyBody": "Search for a city and add the first destination.",
-    "yourName": "Your name",
-    "yourNameHint": "Optional. Shown next to the places you add.",
-    "justAdded": "New",
-    "checkWeather": "Weather",
-    "addedByOn": "Added by {name} on {date}",
-    "addedOn": "Added on {date}",
-    "addedSnack": "{city} added to the wishlist.",
-    "removeTitle": "Remove destination?",
-    "removeBody": "{city} will be removed for everyone."
-  },
-  "explore": {
-    "heading": "Explore",
-    "intro": "City search geocodes your query and then looks up the country, chaining two external APIs into one response.",
-    "searchLabel": "City name",
-    "searchHint": "At least two characters.",
-    "typeMore": "Type at least two characters.",
-    "noMatches": "No cities matched.",
-    "noResultsTitle": "No cities found",
-    "noResultsBody": "Try a different spelling, or drop any country suffix.",
-    "addToWishlist": "Add",
-    "onWishlist": "On list"
-  },
-  "weather": {
-    "heading": "Weather",
-    "intro": "Current conditions for any city. The backend geocodes the name first, then fetches the forecast for those coordinates.",
-    "cityLabel": "City name",
-    "fromWishlist": "From your wishlist:",
-    "unknownCountry": "Unknown country",
-    "notFound": "No weather found for \"{city}\".",
-    "chainNote": "Two sequential Open-Meteo calls: geocoding, then forecast.",
-    "codes": {
-      "clear": "Clear sky",
-      "mainlyClear": "Mainly clear",
-      "partlyCloudy": "Partly cloudy",
-      "overcast": "Overcast",
-      "fog": "Fog",
-      "drizzle": "Drizzle",
-      "rain": "Rain",
-      "snow": "Snow",
-      "showers": "Rain showers",
-      "snowShowers": "Snow showers",
-      "thunderstorm": "Thunderstorm",
-      "unknown": "Conditions unavailable"
-    }
-  },
-  "countries": {
-    "heading": "Countries",
-    "intro": "Look up a country by name. This endpoint passes the REST Countries payload straight through, so the shape differs from the country data attached to destinations.",
-    "nameLabel": "Country name",
-    "nameHint": "Common name, e.g. Japan or Portugal.",
-    "fromWishlist": "On your wishlist:",
-    "notFound": "No country matched \"{name}\".",
-    "unknownRegion": "Unknown region",
-    "capital": "Capital",
-    "population": "Population",
-    "region": "Region",
-    "onWishlist": "Destinations on wishlist",
-    "passthroughNote": "Served by GET /api/countries/{name} — raw CountryApiResult, not CountryResponse."
-  },
-  "iss": {
-    "heading": "ISS Tracker",
-    "intro": "The backend polls Open Notify every five seconds and pushes each position down the same WebSocket that carries destination events.",
-    "pollNow": "Poll now",
-    "clearTrail": "Clear trail",
-    "mapLabel": "World map with the current ISS position and its recent trail",
-    "legendIss": "ISS",
-    "legendWishlist": "Wishlist destinations",
-    "pushNote": "Positions arrive every 5 seconds while the socket is open.",
-    "secondsAgo": "{n}s ago",
-    "nearest": "Closest wishlist destination: {city}",
-    "nearestDistance": "About {km} km away, great-circle distance.",
-    "hemisphere": {
-      "north": "Northern",
-      "south": "Southern"
-    },
-    "stats": {
-      "position": "Position",
-      "age": "Sampled",
-      "samples": "Trail points",
-      "hemisphere": "Hemisphere"
-    }
-  },
-  "live": {
-    "heading": "Live Feed",
-    "intro": "Every frame received on /ws/destinations, newest first.",
-    "feed": "Frames",
-    "reconnect": "Reconnect",
-    "clear": "Clear",
-    "waiting": "Waiting for the first frame…",
-    "streamTooltip": "Live updates from /ws/destinations",
-    "mergeNote": "The socket merges two unrelated streams with no envelope, so the client tells them apart by the presence of an \"action\" field.",
-    "status": {
-      "idle": "Idle",
-      "connecting": "Connecting",
-      "open": "Live",
-      "closed": "Offline"
-    },
-    "filters": {
-      "all": "All",
-      "destinations": "Destinations",
-      "iss": "ISS"
-    },
-    "counts": {
-      "destinations": "{n} destination",
-      "iss": "{n} ISS"
-    },
-    "events": {
-      "CREATED": "{city} ({country}) added",
-      "UPDATED": "{city} ({country}) updated",
-      "DELETED": "{city} ({country}) removed",
-      "ISS": "ISS at {lat}, {lon}"
-    }
-  },
-  "settings": {
-    "heading": "Settings",
-    "intro": "Client-side preferences and the backend this app is talking to.",
-    "identity": "Identity",
-    "identityNote": "There is no auth on the backend — addedBy is a free-text field, so this is just a name stored in your browser.",
-    "appearance": "Appearance",
-    "darkMode": "Dark mode",
-    "backend": "Backend",
-    "restBase": "REST base",
-    "wsUrl": "WebSocket",
-    "sameOrigin": "(same origin — proxied by Vite in dev)",
-    "overrideActive": "Pointing at a backend supplied via ?api= rather than the build config.",
-    "overrideHint": "Append ?api=http://host:8080 to the URL to point this app at another backend without rebuilding.",
-    "reloadData": "Reload destinations",
-    "endpoints": "Endpoints in use",
-    "endpoint": "Endpoint",
-    "usedBy": "Used by"
-  }
+	"app": {
+		"title": "Places I'd Like to Visit",
+		"subtitle": "Collaborative travel wishlist"
+	},
+	"common": {
+		"cancel": "Cancel",
+		"remove": "Remove",
+		"search": "Search",
+		"language": "Language",
+		"toggleTheme": "Toggle light/dark theme",
+		"errors": {
+			"unreachable": "Cannot reach the API - is the Spring app running on port 8080?",
+			"notFound": "Not found.",
+			"validation": "The backend rejected the request.",
+			"other": "Something went wrong."
+		}
+	},
+	"nav": {
+		"home": "Home",
+		"wishlist": "Wishlist",
+		"explore": "Explore",
+		"weather": "Weather",
+		"countries": "Countries",
+		"iss": "ISS Tracker",
+		"live": "Live Feed",
+		"settings": "Settings",
+		"sections": {
+			"plan": "Plan",
+			"lookup": "Look up",
+			"live": "Live"
+		}
+	},
+	"home": {
+		"heading": "Home",
+		"intro": "This isn't a real product - it's a showcase of how I architect a full-stack app, pairing this Vue 3 + TypeScript client with a reactive Spring WebFlux backend. Each page below demonstrates a different technique.",
+		"byRegion": "Destinations by region",
+		"stats": {
+			"destinations": "Destinations",
+			"countries": "Countries",
+			"contributors": "Contributors",
+			"stream": "Live stream"
+		},
+		"cards": {
+			"wishlist": "Full CRUD over a reactive REST API, kept in sync via Pinia and live WebSocket events.",
+			"explore": "Debounced search that chains two upstream APIs into one backend response.",
+			"weather": "Two sequential external API calls: geocode a city, then fetch its forecast.",
+			"countries": "A pass-through proxy - a third-party API's response shape, forwarded as-is.",
+			"iss": "Server-side polling pushed to clients over a shared WebSocket.",
+			"live": "The raw, merged WebSocket stream, frame by frame, exactly as the backend emits it."
+		}
+	},
+	"wishlist": {
+		"heading": "Wishlist",
+		"intro": "Every place on the shared list. Additions and removals from other browsers show up here without a refresh.",
+		"add": "Add destination",
+		"addTitle": "Add a destination",
+		"gridView": "Grid view",
+		"mapView": "Map view",
+		"mapLabel": "World map of wishlist destinations",
+		"mapCaption": "{count} destinations plotted on an equirectangular projection.",
+		"emptyTitle": "Nothing on the list yet",
+		"emptyBody": "Search for a city and add the first destination.",
+		"yourName": "Your name",
+		"yourNameHint": "Optional. Shown next to the places you add.",
+		"justAdded": "New",
+		"checkWeather": "Weather",
+		"addedByOn": "Added by {name} on {date}",
+		"addedOn": "Added on {date}",
+		"addedSnack": "{city} added to the wishlist.",
+		"removeTitle": "Remove destination?",
+		"removeBody": "{city} will be removed for everyone."
+	},
+	"explore": {
+		"heading": "Explore",
+		"intro": "City search geocodes your query and then looks up the country, chaining two external APIs into one response.",
+		"searchLabel": "City name",
+		"searchHint": "At least two characters.",
+		"typeMore": "Type at least two characters.",
+		"noMatches": "No cities matched.",
+		"noResultsTitle": "No cities found",
+		"noResultsBody": "Try a different spelling, or drop any country suffix.",
+		"addToWishlist": "Add",
+		"onWishlist": "On list"
+	},
+	"weather": {
+		"heading": "Weather",
+		"intro": "Current conditions for any city. The backend geocodes the name first, then fetches the forecast for those coordinates.",
+		"cityLabel": "City name",
+		"fromWishlist": "From your wishlist:",
+		"unknownCountry": "Unknown country",
+		"notFound": "No weather found for \"{city}\".",
+		"chainNote": "Two sequential Open-Meteo calls: geocoding, then forecast.",
+		"codes": {
+			"clear": "Clear sky",
+			"mainlyClear": "Mainly clear",
+			"partlyCloudy": "Partly cloudy",
+			"overcast": "Overcast",
+			"fog": "Fog",
+			"drizzle": "Drizzle",
+			"rain": "Rain",
+			"snow": "Snow",
+			"showers": "Rain showers",
+			"snowShowers": "Snow showers",
+			"thunderstorm": "Thunderstorm",
+			"unknown": "Conditions unavailable"
+		}
+	},
+	"countries": {
+		"heading": "Countries",
+		"intro": "Look up a country by name. This endpoint passes the REST Countries payload straight through, so the shape differs from the country data attached to destinations.",
+		"nameLabel": "Country name",
+		"nameHint": "Common name, e.g. Japan or Portugal.",
+		"fromWishlist": "On your wishlist:",
+		"notFound": "No country matched \"{name}\".",
+		"unknownRegion": "Unknown region",
+		"capital": "Capital",
+		"population": "Population",
+		"region": "Region",
+		"onWishlist": "Destinations on wishlist",
+		"passthroughNote": "Served by GET /api/countries/{name} - raw CountryApiResult, not CountryResponse."
+	},
+	"iss": {
+		"heading": "ISS Tracker",
+		"intro": "The backend polls Open Notify every five seconds and pushes each position down the same WebSocket that carries destination events.",
+		"pollNow": "Poll now",
+		"clearTrail": "Clear trail",
+		"mapLabel": "World map with the current ISS position and its recent trail",
+		"legendIss": "ISS",
+		"legendWishlist": "Wishlist destinations",
+		"pushNote": "Positions arrive every 5 seconds while the socket is open.",
+		"secondsAgo": "{n}s ago",
+		"nearest": "Closest wishlist destination: {city}",
+		"nearestDistance": "About {km} km away, great-circle distance.",
+		"hemisphere": {
+			"north": "Northern",
+			"south": "Southern"
+		},
+		"stats": {
+			"position": "Position",
+			"age": "Sampled",
+			"samples": "Trail points",
+			"hemisphere": "Hemisphere"
+		}
+	},
+	"live": {
+		"heading": "Live Feed",
+		"intro": "Every frame received on /ws/destinations, newest first.",
+		"feed": "Frames",
+		"reconnect": "Reconnect",
+		"clear": "Clear",
+		"waiting": "Waiting for the first frame…",
+		"streamTooltip": "Live updates from /ws/destinations",
+		"mergeNote": "The socket merges two unrelated streams with no envelope, so the client tells them apart by the presence of an \"action\" field.",
+		"status": {
+			"idle": "Idle",
+			"connecting": "Connecting",
+			"open": "Live",
+			"closed": "Offline"
+		},
+		"filters": {
+			"all": "All",
+			"destinations": "Destinations",
+			"iss": "ISS"
+		},
+		"counts": {
+			"destinations": "{n} destination",
+			"iss": "{n} ISS"
+		},
+		"events": {
+			"CREATED": "{city} ({country}) added",
+			"UPDATED": "{city} ({country}) updated",
+			"DELETED": "{city} ({country}) removed",
+			"ISS": "ISS at {lat}, {lon}"
+		}
+	},
+	"settings": {
+		"heading": "Settings",
+		"intro": "Client-side preferences and the backend this app is talking to.",
+		"identity": "Identity",
+		"identityNote": "There is no auth on the backend - addedBy is a free-text field, so this is just a name stored in your browser.",
+		"appearance": "Appearance",
+		"darkMode": "Dark mode",
+		"backend": "Backend",
+		"restBase": "REST base",
+		"wsUrl": "WebSocket",
+		"sameOrigin": "(same origin - proxied by Vite in dev)",
+		"overrideActive": "Pointing at a backend supplied via ?api= rather than the build config.",
+		"overrideHint": "Append ?api=http://host:8080 to the URL to point this app at another backend without rebuilding.",
+		"reloadData": "Reload destinations",
+		"endpoints": "Endpoints in use",
+		"endpoint": "Endpoint",
+		"usedBy": "Used by"
+	}
 }

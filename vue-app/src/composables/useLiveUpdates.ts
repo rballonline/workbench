@@ -34,7 +34,7 @@ function scheduleReconnect () {
   if (manuallyClosed || reconnectTimer) {
     return
   }
-  // Exponential backoff, capped — the backend restarts often in dev and we don't
+  // Exponential backoff, capped - the backend restarts often in dev and we don't
   // want a tight reconnect loop hammering it while it boots.
   const delay = Math.min(500 * 2 ** attempt, MAX_BACKOFF_MS)
   attempt += 1
@@ -64,7 +64,11 @@ function handleMessage (raw: string) {
 }
 
 function open () {
-  if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+  if (
+    socket
+    && (socket.readyState === WebSocket.OPEN
+      || socket.readyState === WebSocket.CONNECTING)
+  ) {
     return
   }
 

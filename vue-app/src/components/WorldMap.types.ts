@@ -14,7 +14,7 @@ export interface MapMarker {
   label?: string
   color?: string
   size?: number
-  /** Draws a soft halo — used for the single "live" marker. */
+  /** Draws a soft halo - used for the single "live" marker. */
   pulse?: boolean
 }
 

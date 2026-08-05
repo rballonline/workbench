@@ -3,7 +3,7 @@
     Equirectangular plate carrée: the viewBox is literally 360 x 180 degrees, so
     projecting is `x = lon + 180`, `y = 90 - lat` with no scaling maths anywhere else.
     Drawn as a graticule rather than a coastline outline to keep the component
-    dependency-free — no map tiles, no bundled world geometry.
+    dependency-free - no map tiles, no bundled world geometry.
   -->
   <svg
     :aria-label="ariaLabel"
@@ -99,71 +99,79 @@
   const PARALLELS = [-60, -30, 30, 60]
 
   function toPoints (segment: MapPoint[]): string {
-    return segment.map(p => `${p.longitude + 180},${90 - p.latitude}`).join(' ')
+    return segment
+      .map(p => `${p.longitude + 180},${90 - p.latitude}`)
+      .join(' ')
   }
 </script>
 
 <style scoped>
-  .world-map {
-    display: block;
-    /* The viewBox is 360x180 degrees, so an unconstrained width makes the map half as
+.world-map {
+	display: block;
+	/* The viewBox is 360x180 degrees, so an unconstrained width makes the map half as
        tall as the page is wide. Cap it so it stays a map rather than a wall. */
-    width: 100%;
-    max-width: 880px;
-    height: auto;
-    margin-inline: auto;
-    border-radius: 6px;
-  }
+	width: 100%;
+	max-width: 880px;
+	height: auto;
+	margin-inline: auto;
+	border-radius: 6px;
+}
 
-  .ocean {
-    fill: rgba(var(--v-theme-primary), 0.06);
-  }
+.ocean {
+	fill: rgba(var(--v-theme-primary), 0.06);
+}
 
-  .graticule line {
-    stroke: rgba(var(--v-theme-on-surface), 0.12);
-    stroke-width: 0.3;
-  }
+.graticule line {
+	stroke: rgba(var(--v-theme-on-surface), 0.12);
+	stroke-width: 0.3;
+}
 
-  .graticule-major line {
-    stroke: rgba(var(--v-theme-on-surface), 0.28);
-    stroke-width: 0.45;
-  }
+.graticule-major line {
+	stroke: rgba(var(--v-theme-on-surface), 0.28);
+	stroke-width: 0.45;
+}
 
-  .graticule-tropic line {
-    stroke: rgba(var(--v-theme-on-surface), 0.14);
-    stroke-width: 0.3;
-    stroke-dasharray: 2 2;
-  }
+.graticule-tropic line {
+	stroke: rgba(var(--v-theme-on-surface), 0.14);
+	stroke-width: 0.3;
+	stroke-dasharray: 2 2;
+}
 
-  .trail {
-    fill: none;
-    stroke-width: 0.9;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0.75;
-  }
+.trail {
+	fill: none;
+	stroke-width: 0.9;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	opacity: 0.75;
+}
 
-  .marker {
-    stroke: rgb(var(--v-theme-surface));
-    stroke-width: 0.6;
-  }
+.marker {
+	stroke: rgb(var(--v-theme-surface));
+	stroke-width: 0.6;
+}
 
-  .marker-pulse {
-    opacity: 0.25;
-    animation: world-map-pulse 2s ease-out infinite;
-    transform-origin: center;
-    transform-box: fill-box;
-  }
+.marker-pulse {
+	opacity: 0.25;
+	animation: world-map-pulse 2s ease-out infinite;
+	transform-origin: center;
+	transform-box: fill-box;
+}
 
-  @keyframes world-map-pulse {
-    0% { opacity: 0.35; transform: scale(0.5); }
-    100% { opacity: 0; transform: scale(1.3); }
-  }
+@keyframes world-map-pulse {
+	0% {
+		opacity: 0.35;
+		transform: scale(0.5);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.3);
+	}
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    .marker-pulse {
-      animation: none;
-      opacity: 0.2;
-    }
-  }
+@media (prefers-reduced-motion: reduce) {
+	.marker-pulse {
+		animation: none;
+		opacity: 0.2;
+	}
+}
 </style>

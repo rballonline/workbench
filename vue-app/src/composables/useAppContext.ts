@@ -17,9 +17,11 @@ function stripTrailingSlash (value: string): string {
 
 function resolve (): AppContext {
   // `?api=http://some-host:8080` points the whole app at another backend without a
-  // rebuild — handy when the Spring app runs somewhere other than localhost.
+  // rebuild - handy when the Spring app runs somewhere other than localhost.
   const override = new URLSearchParams(window.location.search).get('api')
-  const apiBase = stripTrailingSlash(override ?? import.meta.env.VITE_API_BASE_URL ?? '')
+  const apiBase = stripTrailingSlash(
+    override ?? import.meta.env.VITE_API_BASE_URL ?? '',
+  )
 
   const wsOrigin = stripTrailingSlash(
     override ?? import.meta.env.VITE_WS_BASE_URL ?? window.location.origin,

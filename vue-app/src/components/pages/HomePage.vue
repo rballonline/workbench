@@ -1,7 +1,7 @@
 <template>
   <div class="pa-6 pa-sm-8" style="max-width: 1100px">
-    <div class="text-h6 mb-1">{{ t('welcome.heading') }}</div>
-    <p class="text-body-2 text-medium-emphasis mb-6">{{ t('welcome.intro') }}</p>
+    <div class="text-h6 mb-1">{{ t('home.heading') }}</div>
+    <p class="text-body-2 text-medium-emphasis mb-6">{{ t('home.intro') }}</p>
 
     <ApiErrorAlert :failure="destinationsStore.error" @close="destinationsStore.clearError()" />
 
@@ -32,14 +32,14 @@
           <v-card-text class="d-flex flex-column align-center text-center pa-6">
             <v-icon class="mb-3" color="primary" size="40">{{ action.icon }}</v-icon>
             <div class="text-subtitle-2 mb-1">{{ t(`nav.${action.page}`) }}</div>
-            <p class="text-caption text-medium-emphasis">{{ t(`welcome.cards.${action.page}`) }}</p>
+            <p class="text-caption text-medium-emphasis">{{ t(`home.cards.${action.page}`) }}</p>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
     <v-card v-if="regions.length > 0" class="mt-6" elevation="1">
-      <v-card-title class="text-subtitle-1 pa-4 pb-2">{{ t('welcome.byRegion') }}</v-card-title>
+      <v-card-title class="text-subtitle-1 pa-4 pb-2">{{ t('home.byRegion') }}</v-card-title>
 
       <v-card-text class="pa-4 pt-0">
         <div v-for="region in regions" :key="region.name" class="mb-3">
@@ -88,25 +88,25 @@
 
   const stats = computed(() => [
     {
-      labelKey: 'welcome.stats.destinations',
+      labelKey: 'home.stats.destinations',
       value: destinationsStore.count,
       icon: 'mdi-map-marker-outline',
       color: 'primary',
     },
     {
-      labelKey: 'welcome.stats.countries',
+      labelKey: 'home.stats.countries',
       value: countryCount.value,
       icon: 'mdi-flag-outline',
       color: 'secondary',
     },
     {
-      labelKey: 'welcome.stats.contributors',
+      labelKey: 'home.stats.contributors',
       value: destinationsStore.contributors.length,
       icon: 'mdi-account-multiple-outline',
       color: 'teal',
     },
     {
-      labelKey: 'welcome.stats.stream',
+      labelKey: 'home.stats.stream',
       value: t(`live.status.${status.value}`),
       icon: 'mdi-pulse',
       color: status.value === 'open' ? 'success' : 'warning',

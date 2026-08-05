@@ -1,6 +1,5 @@
 package com.tiltedev.spring_reactive.service;
 
-import com.tiltedev.spring_reactive.client.ReactiveHttpClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.tiltedev.spring_reactive.dto.result.CountryApiResult;
 import lombok.RequiredArgsConstructor;
