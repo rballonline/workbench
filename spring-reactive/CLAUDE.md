@@ -23,7 +23,7 @@ A collaborative travel wishlist. Users search for cities, pick one, and add it t
 ## Package Structure
 
 ```
-com.tiltedev.spring_reactive/
+com.tiltedev.springreactive/
 ├── config/         WebSocketConfig, WebClientConfig, SecurityConfig, OpenApiConfig
 ├── controller/     REST controllers + GlobalExceptionHandler + RequestLoggingFilter
 ├── graphql/        GraphQL controller (@QueryMapping, @MutationMapping)

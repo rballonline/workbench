@@ -1,7 +1,7 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.dto.response.IssResponse;
-import com.tiltedev.spring_reactive.service.IssService;
+import com.tiltedev.springreactive.dto.response.IssResponse;
+import com.tiltedev.springreactive.service.IssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

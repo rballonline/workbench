@@ -1,8 +1,8 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.dto.request.CitySearchRequest;
-import com.tiltedev.spring_reactive.dto.response.CitySearchResponse;
-import com.tiltedev.spring_reactive.service.CitySearchService;
+import com.tiltedev.springreactive.dto.request.CitySearchRequest;
+import com.tiltedev.springreactive.dto.response.CitySearchResponse;
+import com.tiltedev.springreactive.service.CitySearchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.config;
+package com.tiltedev.springreactive.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

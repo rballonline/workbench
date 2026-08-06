@@ -1,6 +1,6 @@
-package com.tiltedev.spring_reactive.repository;
+package com.tiltedev.springreactive.repository;
 
-import com.tiltedev.spring_reactive.dto.projection.DestinationWithCountry;
+import com.tiltedev.springreactive.dto.projection.DestinationWithCountry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.config;
+package com.tiltedev.springreactive.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

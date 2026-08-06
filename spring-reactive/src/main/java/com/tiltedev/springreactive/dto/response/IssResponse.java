@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.dto.response;
+package com.tiltedev.springreactive.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

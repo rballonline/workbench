@@ -1,8 +1,8 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.dto.request.AddDestinationRequest;
-import com.tiltedev.spring_reactive.dto.response.DestinationResponse;
-import com.tiltedev.spring_reactive.service.DestinationService;
+import com.tiltedev.springreactive.dto.request.AddDestinationRequest;
+import com.tiltedev.springreactive.dto.response.DestinationResponse;
+import com.tiltedev.springreactive.service.DestinationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

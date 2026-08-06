@@ -1,13 +1,13 @@
-package com.tiltedev.spring_reactive.service;
+package com.tiltedev.springreactive.service;
 
-import com.tiltedev.spring_reactive.dto.event.DestinationEvent;
-import com.tiltedev.spring_reactive.dto.projection.DestinationWithCountry;
-import com.tiltedev.spring_reactive.dto.request.AddDestinationRequest;
-import com.tiltedev.spring_reactive.dto.response.CountryResponse;
-import com.tiltedev.spring_reactive.dto.response.DestinationResponse;
-import com.tiltedev.spring_reactive.model.Destination;
-import com.tiltedev.spring_reactive.repository.DestinationCountryRepository;
-import com.tiltedev.spring_reactive.repository.DestinationRepository;
+import com.tiltedev.springreactive.dto.event.DestinationEvent;
+import com.tiltedev.springreactive.dto.projection.DestinationWithCountry;
+import com.tiltedev.springreactive.dto.request.AddDestinationRequest;
+import com.tiltedev.springreactive.dto.response.CountryResponse;
+import com.tiltedev.springreactive.dto.response.DestinationResponse;
+import com.tiltedev.springreactive.model.Destination;
+import com.tiltedev.springreactive.repository.DestinationCountryRepository;
+import com.tiltedev.springreactive.repository.DestinationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

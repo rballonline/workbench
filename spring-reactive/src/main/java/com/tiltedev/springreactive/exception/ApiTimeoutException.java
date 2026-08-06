@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.exception;
+package com.tiltedev.springreactive.exception;
 
 public class ApiTimeoutException extends ApiException {
     public ApiTimeoutException(String url, String message) {

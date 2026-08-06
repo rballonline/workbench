@@ -1,7 +1,7 @@
-package com.tiltedev.spring_reactive.service;
+package com.tiltedev.springreactive.service;
 
-import com.tiltedev.spring_reactive.model.Country;
-import com.tiltedev.spring_reactive.repository.CountryRepository;
+import com.tiltedev.springreactive.model.Country;
+import com.tiltedev.springreactive.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.dto.response.WeatherResponse;
-import com.tiltedev.spring_reactive.service.WeatherService;
+import com.tiltedev.springreactive.dto.response.WeatherResponse;
+import com.tiltedev.springreactive.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

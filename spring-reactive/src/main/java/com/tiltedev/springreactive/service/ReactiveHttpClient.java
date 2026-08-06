@@ -1,7 +1,7 @@
-package com.tiltedev.spring_reactive.service;
+package com.tiltedev.springreactive.service;
 
-import com.tiltedev.spring_reactive.config.HttpClientConfig;
-import com.tiltedev.spring_reactive.exception.*;
+import com.tiltedev.springreactive.config.HttpClientConfig;
+import com.tiltedev.springreactive.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class ReactiveHttpClient {
 
     /**
      * Reactor Context key
-     * {@link com.tiltedev.spring_reactive.controller.RequestLoggingFilter} writes
+     * {@link com.tiltedev.springreactive.controller.RequestLoggingFilter} writes
      * the inbound request id under.
      */
     public static final String REQUEST_ID_CONTEXT_KEY = "requestId";

@@ -1,6 +1,6 @@
-package com.tiltedev.spring_reactive.dto.event;
+package com.tiltedev.springreactive.dto.event;
 
-import com.tiltedev.spring_reactive.model.Destination;
+import com.tiltedev.springreactive.model.Destination;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

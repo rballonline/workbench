@@ -1,7 +1,7 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.dto.result.CountryApiResult;
-import com.tiltedev.spring_reactive.service.CountryApiService;
+import com.tiltedev.springreactive.dto.result.CountryApiResult;
+import com.tiltedev.springreactive.service.CountryApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

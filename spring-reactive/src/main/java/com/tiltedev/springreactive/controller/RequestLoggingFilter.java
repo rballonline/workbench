@@ -1,6 +1,6 @@
-package com.tiltedev.spring_reactive.controller;
+package com.tiltedev.springreactive.controller;
 
-import com.tiltedev.spring_reactive.service.ReactiveHttpClient;
+import com.tiltedev.springreactive.service.ReactiveHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

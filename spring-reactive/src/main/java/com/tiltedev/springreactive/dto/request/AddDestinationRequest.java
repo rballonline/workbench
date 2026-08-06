@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.dto.request;
+package com.tiltedev.springreactive.dto.request;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

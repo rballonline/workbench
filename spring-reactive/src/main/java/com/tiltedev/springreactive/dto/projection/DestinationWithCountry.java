@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.dto.projection;
+package com.tiltedev.springreactive.dto.projection;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

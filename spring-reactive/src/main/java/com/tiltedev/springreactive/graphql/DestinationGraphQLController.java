@@ -1,8 +1,8 @@
-package com.tiltedev.spring_reactive.graphql;
+package com.tiltedev.springreactive.graphql;
 
-import com.tiltedev.spring_reactive.dto.request.AddDestinationRequest;
-import com.tiltedev.spring_reactive.dto.response.DestinationResponse;
-import com.tiltedev.spring_reactive.service.DestinationService;
+import com.tiltedev.springreactive.dto.request.AddDestinationRequest;
+import com.tiltedev.springreactive.dto.response.DestinationResponse;
+import com.tiltedev.springreactive.service.DestinationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;

@@ -1,8 +1,8 @@
-package com.tiltedev.spring_reactive.service;
+package com.tiltedev.springreactive.service;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import com.tiltedev.spring_reactive.dto.response.CitySearchResponse;
-import com.tiltedev.spring_reactive.dto.result.GeocodingResult;
+import com.tiltedev.springreactive.dto.response.CitySearchResponse;
+import com.tiltedev.springreactive.dto.result.GeocodingResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

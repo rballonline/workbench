@@ -1,8 +1,8 @@
-package com.tiltedev.spring_reactive.service;
+package com.tiltedev.springreactive.service;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import com.tiltedev.spring_reactive.dto.response.IssResponse;
-import com.tiltedev.spring_reactive.dto.result.IssApiResult;
+import com.tiltedev.springreactive.dto.response.IssResponse;
+import com.tiltedev.springreactive.dto.result.IssApiResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

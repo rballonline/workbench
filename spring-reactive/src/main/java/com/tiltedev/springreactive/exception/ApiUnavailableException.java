@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.exception;
+package com.tiltedev.springreactive.exception;
 
 public class ApiUnavailableException extends ApiException {
     public ApiUnavailableException(String url, String message) {

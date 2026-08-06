@@ -1,9 +1,9 @@
-package com.tiltedev.spring_reactive.config;
+package com.tiltedev.springreactive.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.tiltedev.spring_reactive.dto.event.DestinationEvent;
-import com.tiltedev.spring_reactive.websocket.LiveUpdateWebSocketHandler;
+import com.tiltedev.springreactive.dto.event.DestinationEvent;
+import com.tiltedev.springreactive.websocket.LiveUpdateWebSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.HandlerMapping;

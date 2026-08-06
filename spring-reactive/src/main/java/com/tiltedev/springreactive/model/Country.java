@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.model;
+package com.tiltedev.springreactive.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

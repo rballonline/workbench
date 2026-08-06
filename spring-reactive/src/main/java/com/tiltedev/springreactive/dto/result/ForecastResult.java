@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.dto.result;
+package com.tiltedev.springreactive.dto.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

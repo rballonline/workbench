@@ -1,9 +1,9 @@
-package com.tiltedev.spring_reactive.websocket;
+package com.tiltedev.springreactive.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tiltedev.spring_reactive.dto.event.DestinationEvent;
-import com.tiltedev.spring_reactive.service.IssService;
+import com.tiltedev.springreactive.dto.event.DestinationEvent;
+import com.tiltedev.springreactive.service.IssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

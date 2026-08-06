@@ -1,4 +1,4 @@
-package com.tiltedev.spring_reactive.config;
+package com.tiltedev.springreactive.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

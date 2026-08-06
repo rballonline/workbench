@@ -1,6 +1,6 @@
-package com.tiltedev.spring_reactive.repository;
+package com.tiltedev.springreactive.repository;
 
-import com.tiltedev.spring_reactive.model.Country;
+import com.tiltedev.springreactive.model.Country;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
