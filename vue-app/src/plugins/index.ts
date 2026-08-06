@@ -6,6 +6,7 @@
 
 import type { App } from 'vue'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { router } from '@/router'
 import pinia from '../stores'
 import i18n from './i18n'
 // Plugins
@@ -18,4 +19,5 @@ export function registerPlugins (app: App) {
     .use(vuetify)
     .use(i18n)
     .use(pinia)
+    .use(router)
 }

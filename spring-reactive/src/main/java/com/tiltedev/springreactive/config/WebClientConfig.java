@@ -1,7 +1,9 @@
 package com.tiltedev.springreactive.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,9 +26,10 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient countriesWebClient() {
+    public WebClient countriesWebClient(@Value("${app.restcountries.api-key}") String apiKey) {
         return WebClient.builder()
-                .baseUrl("https://restcountries.com")
+                .baseUrl("https://api.restcountries.com")
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                 .build();
     }
 

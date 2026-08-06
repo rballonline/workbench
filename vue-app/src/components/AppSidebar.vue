@@ -16,12 +16,12 @@
         <v-list-item
           v-for="item in section.items"
           :key="item.page"
-          :active="currentPage === item.page"
+          :active="route.name === item.page"
           color="primary"
           :prepend-icon="item.icon"
           rounded="lg"
           :title="t(`nav.${item.page}`)"
-          @click="$emit('navigate', item.page)"
+          :to="{ name: item.page }"
         >
           <template v-if="item.page === 'wishlist' && destinationsStore.count > 0" #append>
             <v-chip size="x-small" variant="tonal">{{ destinationsStore.count }}</v-chip>
@@ -36,12 +36,11 @@
 
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
+  import { useRoute } from 'vue-router'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
 
-  defineProps<{ currentPage: string }>()
-  defineEmits<{ navigate: [page: string] }>()
-
   const { t } = useI18n()
+  const route = useRoute()
   const destinationsStore = useDestinationsStore()
 
   const NAV_SECTIONS = [

@@ -4,6 +4,7 @@ import com.tiltedev.springreactive.model.Country;
 import com.tiltedev.springreactive.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -14,6 +15,7 @@ public class CountrySyncService {
 
     private final CountryRepository countryRepository;
     private final CountryApiService countryApiService;
+    private final R2dbcEntityTemplate template;
 
     public Mono<Country> ensureExists(String countryCode) {
         return countryRepository.findById(countryCode)
@@ -29,7 +31,7 @@ public class CountrySyncService {
                                         .build())
                                 .flatMap(country -> {
                                     log.info("Synced country to DB: {}", country.getCode());
-                                    return countryRepository.save(country);
+                                    return template.insert(Country.class).using(country);
                                 })
                 );
     }

@@ -69,14 +69,18 @@ export interface IssPosition {
  * `dto/result/CountryApiResult` - GET /api/countries/{name}.
  * This one is the raw REST Countries shape passed straight through by
  * `CountryController`, so it is shaped differently from `CountryResponse`.
+ * The upstream provider's own nested fields (`names`, `capitals`, `codes`,
+ * `flag`) reshape whenever they change API versions - bind to these flat
+ * convenience fields instead, which `CountryApiResult` keeps stable across
+ * that churn.
  */
 export interface CountryApiResult {
-  name: Record<string, string> | null
-  capital: string[] | null
+  commonName: string | null
+  capitalCity: string | null
   region: string | null
   population: number | null
-  cca2: string[] | null
-  flags: { png?: string } | null
+  alpha2Code: string | null
+  flagUrl: string | null
 }
 
 /**

@@ -132,7 +132,7 @@
           prepend-icon="mdi-plus"
           size="small"
           variant="text"
-          @click="$emit('navigate', 'explore')"
+          @click="router.push({ name: 'explore' })"
         >
           {{ t("explore.addToWishlist") }}
         </v-btn>
@@ -145,9 +145,9 @@
   import type { Weather } from '@shared/types'
   import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRoute, useRouter } from 'vue-router'
   import ApiErrorAlert from '@/components/ApiErrorAlert.vue'
   import { type ApiFailure, classifyError, useApi } from '@/composables/useApi'
-  import { readPageParam } from '@/composables/useAppNav'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
   import {
     describeWeatherCode,
@@ -155,9 +155,9 @@
     toFahrenheit,
   } from '@/utils/weatherCodes'
 
-  defineEmits<{ navigate: [page: string, extra?: Record<string, string>] }>()
-
   const { t } = useI18n()
+  const route = useRoute()
+  const router = useRouter()
   const api = useApi()
   const destinationsStore = useDestinationsStore()
 
@@ -217,7 +217,7 @@
 
   // Deep link from the wishlist card's "check weather" action.
   onMounted(() => {
-    const preset = readPageParam('city')
-    if (preset) lookupCity(preset)
+    const preset = route.query.city
+    if (typeof preset === 'string') lookupCity(preset)
   })
 </script>

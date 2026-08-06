@@ -2,35 +2,39 @@
 
 A Vue 3 front end for the **"Places I'd Like to Visit"** backend in [`../spring-reactive`](../spring-reactive/). It is a read/write client for that app's REST endpoints plus a live consumer of its WebSocket.
 
-The structure is deliberately modelled on `C:\Code\gangsheet-builder` - same stack, same shell/sidebar/page-map layout, same query-param routing, same `@`/`@shared` aliases - so patterns learned in one repo carry to the other. It shares no code with it and builds nothing gang-sheet related.
+The structure is deliberately modelled on `C:\Code\gangsheet-builder` - same stack, same shell/sidebar/page-map layout, same `@`/`@shared` aliases - so patterns learned in one repo carry to the other. It shares no code with it and builds nothing gang-sheet related. Routing diverges from that sibling repo: this app uses Vue Router rather than query-param routing.
 
 ## Stack
 
 - **Vue 3** (Composition API, `<script setup>`) + **TypeScript**
 - **Vuetify 3** for UI components
+- **Vue Router** for page navigation
 - **Pinia** (with persisted state) for stores
 - **vue-i18n** for localization (en, es)
 - **Vite** for build tooling
-- No canvas library, no Shopify, no vue-router
+- No canvas library, no Shopify
 
 ## Key paths
 
 - `shared/types.ts` - hand-maintained mirror of the backend's DTOs
 - `src/components/` - `AppShell.vue` is the root; `pages/` holds one component per page
-- `src/composables/` - `useApi`, `useAppContext`, `useAppNav`, `useLiveUpdates`
+- `src/router/` - the Vue Router instance and route table
+- `src/composables/` - `useApi`, `useAppContext`, `useLiveUpdates`
 - `src/stores/` - `useDestinationsStore`, `useIssStore`, `useUserStore`
 - `src/utils/weatherCodes.ts` - WMO code → icon/label mapping
 - `src/locales/` - `en.json`, `es.json`
 
 ## App structure
 
-`App.vue` renders `AppShell.vue` and nothing else. The shell owns the `v-app` root, the app bar, the sidebar, the WebSocket wiring, and the async page map.
+`App.vue` renders `AppShell.vue` and nothing else. The shell owns the `v-app` root, the app bar, the sidebar, and the WebSocket wiring; page rendering itself goes through `<router-view>`.
 
 ### Page navigation
 
-No Vue Router. `useAppNav` reads `?page=home` (default) from the URL and updates it via `history.pushState`, which preserves the other query params - `?api=` in particular must survive navigation.
+`src/router/index.ts` defines one named route per page (`home`, `wishlist`, `explore`, `weather`, `countries`, `iss`, `live`, `settings`), each lazy-loaded via `component: () => import(...)` so pages stay separate JS chunks. `AppShell` wraps `<router-view>` in `Suspense` to keep the loading-spinner fallback that used to live around the page-map `component :is`.
 
-`AppShell` maps the `page` key to a `defineAsyncComponent` import, so each page is a separate JS chunk. Pages emit `navigate` with an optional params object: `$emit('navigate', 'weather', { city: 'Tokyo' })` deep-links into the weather page, which reads it back with `readPageParam('city')`. Page-scoped params are listed in `PAGE_PARAMS` and cleared on every navigation.
+Pages navigate with `useRouter().push({ name: 'weather', query: { city: 'Tokyo' } })` instead of emitting a `navigate` event. `WeatherPage` reads its deep-linked city back with `useRoute().query.city`. `AppSidebar` uses `useRoute()`/`:to` directly rather than taking `currentPage`/`navigate` as a prop and emit.
+
+`?api=` (see below) must survive in-app navigation since it points the whole app at a different backend; a `router.beforeEach` guard in `src/router/index.ts` carries it forward onto any navigation that doesn't already specify it. Deployed builds rely on server-side SPA fallback for path-based routes to work on hard refresh/direct load - `nginx.conf` already has `try_files $uri $uri/ /index.html`, and the Vite dev server does this by default.
 
 | Page        | Backend endpoints                   |
 | ----------- | ----------------------------------- |

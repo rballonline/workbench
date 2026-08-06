@@ -28,7 +28,7 @@
         md="4"
         sm="6"
       >
-        <v-card class="h-100 cursor-pointer" elevation="1" hover @click="$emit('navigate', action.page)">
+        <v-card class="h-100 cursor-pointer" elevation="1" hover @click="router.push({ name: action.page })">
           <v-card-text class="d-flex flex-column align-center text-center pa-6">
             <v-icon class="mb-3" color="primary" size="40">{{ action.icon }}</v-icon>
             <div class="text-subtitle-2 mb-1">{{ t(`nav.${action.page}`) }}</div>
@@ -63,13 +63,13 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
   import ApiErrorAlert from '@/components/ApiErrorAlert.vue'
   import { useLiveUpdates } from '@/composables/useLiveUpdates'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
 
-  defineEmits<{ navigate: [page: string] }>()
-
   const { t } = useI18n()
+  const router = useRouter()
   const destinationsStore = useDestinationsStore()
   const { status } = useLiveUpdates()
 

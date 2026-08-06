@@ -63,11 +63,11 @@
     <v-card v-if="country" elevation="1">
       <div class="d-flex flex-wrap ga-6 pa-6">
         <v-img
-          v-if="country.flags?.png"
+          v-if="country.flagUrl"
           :alt="commonName"
           class="flex-grow-0 rounded border"
           max-width="160"
-          :src="country.flags.png"
+          :src="country.flagUrl"
           width="160"
         />
 
@@ -75,7 +75,7 @@
           <div class="text-h6 mb-1">{{ commonName }}</div>
 
           <div class="text-caption text-medium-emphasis mb-4">
-            {{ country.cca2?.[0] ?? "-" }} ·
+            {{ country.alpha2Code ?? "-" }} ·
             {{ country.region ?? t("countries.unknownRegion") }}
           </div>
 
@@ -130,14 +130,12 @@
       ] as string[],
   )
 
-  // `/api/countries/{name}` returns the raw REST Countries shape, where the display
-  // name is nested under `name.common` rather than being a flat field.
-  const commonName = computed(() => country.value?.name?.common ?? name.value)
+  const commonName = computed(() => country.value?.commonName ?? name.value)
 
   const facts = computed(() => [
     {
       labelKey: 'countries.capital',
-      value: country.value?.capital?.[0] ?? '-',
+      value: country.value?.capitalCity ?? '-',
     },
     {
       labelKey: 'countries.population',

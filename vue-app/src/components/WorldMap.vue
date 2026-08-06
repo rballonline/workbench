@@ -2,8 +2,9 @@
   <!--
     Equirectangular plate carrée: the viewBox is literally 360 x 180 degrees, so
     projecting is `x = lon + 180`, `y = 90 - lat` with no scaling maths anywhere else.
-    Drawn as a graticule rather than a coastline outline to keep the component
-    dependency-free - no map tiles, no bundled world geometry.
+    The landmass silhouette is simplified coastline/border data (see
+    src/assets/world-landmasses.ts) drawn under the graticule for real-world reference,
+    still no map tiles or external requests - it's bundled, not fetched.
   -->
   <svg
     :aria-label="ariaLabel"
@@ -19,6 +20,15 @@
       x="0"
       y="0"
     />
+
+    <g transform="translate(180, 90) scale(1, -1)">
+      <path
+        v-for="(d, index) in WORLD_LANDMASS_PATHS"
+        :key="`land${index}`"
+        class="landmass"
+        :d="d"
+      />
+    </g>
 
     <g class="graticule">
       <line
@@ -86,6 +96,8 @@
 <script setup lang="ts">
   import type { MapMarker, MapPoint, MapTrail } from './WorldMap.types'
 
+  import { WORLD_LANDMASS_PATHS } from '@/assets/world-landmasses'
+
   withDefaults(
     defineProps<{
       markers?: MapMarker[]
@@ -119,6 +131,13 @@
 
 .ocean {
 	fill: rgba(var(--v-theme-primary), 0.06);
+}
+
+.landmass {
+	fill: rgba(var(--v-theme-on-surface), 0.18);
+	fill-rule: evenodd;
+	stroke: rgba(var(--v-theme-on-surface), 0.24);
+	stroke-width: 0.2;
 }
 
 .graticule line {

@@ -84,7 +84,7 @@
                   icon="mdi-weather-partly-cloudy"
                   size="small"
                   variant="text"
-                  @click="$emit('navigate', 'weather', { city: city.cityName })"
+                  @click="router.push({ name: 'weather', query: { city: city.cityName } })"
                 />
 
                 <v-btn
@@ -114,6 +114,7 @@
   import type { CitySearchResult } from '@shared/types'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
   import ApiErrorAlert from '@/components/ApiErrorAlert.vue'
   import { type ApiFailure, classifyError, useApi } from '@/composables/useApi'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
@@ -122,9 +123,8 @@
   /** Matches `CitySearchRequest`'s `@Size(min = 2)`. */
   const MIN_QUERY_LENGTH = 2
 
-  defineEmits<{ navigate: [page: string, extra?: Record<string, string>] }>()
-
   const { t } = useI18n()
+  const router = useRouter()
   const api = useApi()
   const destinationsStore = useDestinationsStore()
   const userStore = useUserStore()

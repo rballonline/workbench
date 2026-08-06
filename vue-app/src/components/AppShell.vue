@@ -1,10 +1,10 @@
 <template>
   <v-app :theme="userStore.theme">
-    <AppSidebar :current-page="currentPage" @navigate="navigate" />
+    <AppSidebar />
 
     <v-app-bar border="b" density="comfortable" flat>
       <v-app-bar-title class="text-subtitle-1">{{
-        t(`nav.${currentPage}`)
+        t(`nav.${String(route.name)}`)
       }}</v-app-bar-title>
 
       <template #append>
@@ -26,34 +26,30 @@
     </v-app-bar>
 
     <v-main class="bg-surface-variant-subtle">
-      <Suspense>
-        <component :is="currentPageComponent" @navigate="navigate" />
+      <router-view v-slot="{ Component }">
+        <Suspense>
+          <component :is="Component" />
 
-        <template #fallback>
-          <div
-            class="d-flex justify-center align-center"
-            style="min-height: 200px"
-          >
-            <v-progress-circular color="primary" indeterminate />
-          </div>
-        </template>
-      </Suspense>
+          <template #fallback>
+            <div
+              class="d-flex justify-center align-center"
+              style="min-height: 200px"
+            >
+              <v-progress-circular color="primary" indeterminate />
+            </div>
+          </template>
+        </Suspense>
+      </router-view>
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
   import { isDestinationEvent } from '@shared/types'
-  import {
-    computed,
-    defineAsyncComponent,
-    onMounted,
-    onUnmounted,
-    watch,
-  } from 'vue'
+  import { onMounted, onUnmounted, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRoute } from 'vue-router'
   import { provideAppContext } from '@/composables/useAppContext'
-  import { DEFAULT_PAGE, useAppNav } from '@/composables/useAppNav'
   import { useLiveUpdates } from '@/composables/useLiveUpdates'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
   import { useIssStore } from '@/stores/useIssStore'
@@ -65,28 +61,11 @@
   provideAppContext()
 
   const { t, locale } = useI18n()
-  const { currentPage, navigate } = useAppNav()
+  const route = useRoute()
 
   const userStore = useUserStore()
   const destinationsStore = useDestinationsStore()
   const issStore = useIssStore()
-
-  const PAGE_COMPONENTS = {
-    home: defineAsyncComponent(() => import('./pages/HomePage.vue')),
-    wishlist: defineAsyncComponent(() => import('./pages/WishlistPage.vue')),
-    explore: defineAsyncComponent(() => import('./pages/ExplorePage.vue')),
-    weather: defineAsyncComponent(() => import('./pages/WeatherPage.vue')),
-    countries: defineAsyncComponent(() => import('./pages/CountriesPage.vue')),
-    iss: defineAsyncComponent(() => import('./pages/IssTrackerPage.vue')),
-    live: defineAsyncComponent(() => import('./pages/LiveFeedPage.vue')),
-    settings: defineAsyncComponent(() => import('./pages/SettingsPage.vue')),
-  } as const
-
-  const currentPageComponent = computed(
-    () =>
-      PAGE_COMPONENTS[currentPage.value as keyof typeof PAGE_COMPONENTS]
-      ?? PAGE_COMPONENTS[DEFAULT_PAGE],
-  )
 
   // The locale the user picked last session; applied once Pinia has rehydrated.
   locale.value = userStore.locale

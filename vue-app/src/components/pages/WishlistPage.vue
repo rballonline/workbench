@@ -196,6 +196,7 @@
   import type { CitySearchResult, Destination } from '@shared/types'
   import { computed, ref, useTemplateRef } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
   import ApiErrorAlert from '@/components/ApiErrorAlert.vue'
   import CitySearchField from '@/components/CitySearchField.vue'
   import DestinationCard from '@/components/DestinationCard.vue'
@@ -203,11 +204,8 @@
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
   import { useUserStore } from '@/stores/useUserStore'
 
-  const emit = defineEmits<{
-    navigate: [page: string, extra?: Record<string, string>]
-  }>()
-
   const { t } = useI18n()
+  const router = useRouter()
   const destinationsStore = useDestinationsStore()
   const userStore = useUserStore()
 
@@ -273,6 +271,6 @@
   }
 
   function goToWeather (destination: Destination) {
-    emit('navigate', 'weather', { city: destination.cityName })
+    router.push({ name: 'weather', query: { city: destination.cityName } })
   }
 </script>

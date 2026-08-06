@@ -5,35 +5,61 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountryApiResult {
 
-    private Map<String, String> name;
-    private List<String> capital;
+    private Names names;
+    private List<Capital> capitals;
     private String region;
     private Long population;
-    private List<String> cca2;
-    private Flags flags;
+    private Codes codes;
+    private Flags flag;
 
     public String getCommonName() {
-        return name != null ? name.get("common") : null;
+        return names != null ? names.getCommon() : null;
     }
 
     public String getCapitalCity() {
-        return capital != null && !capital.isEmpty() ? capital.get(0) : null;
+        return capitals != null && !capitals.isEmpty() ? capitals.get(0).getName() : null;
     }
 
     public String getAlpha2Code() {
-        return cca2 != null && !cca2.isEmpty() ? cca2.get(0) : null;
+        return codes != null ? codes.getAlpha2() : null;
+    }
+
+    public Flags getFlags() {
+        return flag;
+    }
+
+    public String getFlagUrl() {
+        return flag != null ? flag.getPng() : null;
+    }
+
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Names {
+        private String common;
+    }
+
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Capital {
+        private String name;
+    }
+
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Codes {
+        @JsonProperty("alpha_2")
+        private String alpha2;
     }
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Flags {
-        @JsonProperty("png")
+        @JsonProperty("url_png")
         private String png;
     }
 }
