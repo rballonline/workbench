@@ -17,6 +17,15 @@ spring:
         provider:
           my-api:
             token-uri: https://your-auth-server.example.com/oauth2/token
+  ai:
+    mcp:
+      server:
+        name: spring-reactive-mcp-server
+        version: 0.0.1
+        type: ASYNC
+        protocol: STREAMABLE
+        annotation-scanner:
+          enabled: true
 
 app:
   http-client:

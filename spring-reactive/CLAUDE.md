@@ -11,7 +11,8 @@ A collaborative travel wishlist. Users search for cities, pick one, and add it t
 - **Spring for GraphQL** - query/mutation API alongside REST; GraphiQL at `/graphiql`
 - **Spring Security OAuth2 Client** - M2M client credentials for outbound authenticated calls
 - **Lombok** - `@Data`, `@Builder`, `@Slf4j` on all components
-- **SpringDoc OpenAPI** - Swagger UI at `/swagger-ui.html`
+- **SpringDoc OpenAPI** - Swagger UI at `/swagger-ui.html`, spec at `/v3/api-docs`
+- **Spring AI MCP Server (WebFlux, ASYNC)** - exposes app features as MCP tools at `/mcp`
 
 ## Code Standards
 
@@ -23,9 +24,10 @@ A collaborative travel wishlist. Users search for cities, pick one, and add it t
 
 ```
 com.tiltedev.spring_reactive/
-├── config/         WebSocketConfig, WebClientConfig, SecurityConfig
+├── config/         WebSocketConfig, WebClientConfig, SecurityConfig, OpenApiConfig
 ├── controller/     REST controllers + GlobalExceptionHandler + RequestLoggingFilter
 ├── graphql/        GraphQL controller (@QueryMapping, @MutationMapping)
+├── mcp/            TravelMcpTools - wraps services as MCP tools (@McpTool)
 ├── websocket/      LiveUpdateWebSocketHandler
 ├── service/        Business logic + external API services + ReactiveHttpClient (only place that calls WebClient)
 ├── repository/     DestinationRepository, CountryRepository (R2DBC)
@@ -94,6 +96,21 @@ GraphiQL: http://localhost:8080/graphiql
 Queries: `destinations`, `destination(id)`
 Mutations: `addDestination(cityName, countryCode, latitude, longitude, addedBy)`, `removeDestination(id)`
 
+## MCP Server
+
+`mcp/TravelMcpTools` wraps existing services (not controllers) as `@McpTool` methods, so an MCP client (e.g. Claude) can drive the app directly. Server type is `ASYNC`, so tools return `Mono`/`Flux` - configured via `spring.ai.mcp.server.*` in `application.yml`.
+
+Tools: `search_cities`, `get_weather`, `get_country`, `get_iss_position`, `list_destinations`, `add_destination`, `remove_destination`.
+
+Endpoint: `http://localhost:8080/mcp` (streamable HTTP transport).
+
+## OpenAPI / Swagger
+
+Swagger UI: http://localhost:8080/swagger-ui.html
+OpenAPI spec: http://localhost:8080/v3/api-docs
+
+Metadata (title/description) is set in `config/OpenApiConfig`. Controllers need no extra annotations to show up - springdoc scans `@RestController` beans automatically.
+
 ## HTTP Client - ReactiveHttpClient
 
 `service/ReactiveHttpClient` is the **only** place that calls `WebClient.get/post/put/delete`. All services inject and use it. It provides:
@@ -108,3 +125,7 @@ Mutations: `addDestination(cityName, countryCode, latitude, longitude, addedBy)`
 ```
 
 Requires a local MySQL instance with a `spring_reactive` database. Flyway creates the schema on first start.
+
+## Logging
+
+When run with the `local` Spring profile (VS Code launch configs default to this), logs are also written to `logs/spring-reactive.log` alongside the console. If asked to check "spring logs" or investigate a backend error/request-id, read that file directly instead of asking for pasted log output. This only applies locally - the `docker`/hosted profiles don't write a log file.
