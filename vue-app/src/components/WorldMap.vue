@@ -119,78 +119,78 @@
 
 <style scoped>
 .world-map {
-	display: block;
-	/* The viewBox is 360x180 degrees, so an unconstrained width makes the map half as
+  display: block;
+  /* The viewBox is 360x180 degrees, so an unconstrained width makes the map half as
        tall as the page is wide. Cap it so it stays a map rather than a wall. */
-	width: 100%;
-	max-width: 880px;
-	height: auto;
-	margin-inline: auto;
-	border-radius: 6px;
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  margin-inline: auto;
+  border-radius: 6px;
 }
 
 .ocean {
-	fill: rgba(var(--v-theme-primary), 0.06);
+  fill: rgba(var(--v-theme-primary), 0.06);
 }
 
 .landmass {
-	fill: rgba(var(--v-theme-on-surface), 0.18);
-	fill-rule: evenodd;
-	stroke: rgba(var(--v-theme-on-surface), 0.24);
-	stroke-width: 0.2;
+  fill: rgba(var(--v-theme-on-surface), 0.18);
+  fill-rule: evenodd;
+  stroke: rgba(var(--v-theme-on-surface), 0.24);
+  stroke-width: 0.2;
 }
 
 .graticule line {
-	stroke: rgba(var(--v-theme-on-surface), 0.12);
-	stroke-width: 0.3;
+  stroke: rgba(var(--v-theme-on-surface), 0.12);
+  stroke-width: 0.3;
 }
 
 .graticule-major line {
-	stroke: rgba(var(--v-theme-on-surface), 0.28);
-	stroke-width: 0.45;
+  stroke: rgba(var(--v-theme-on-surface), 0.28);
+  stroke-width: 0.45;
 }
 
 .graticule-tropic line {
-	stroke: rgba(var(--v-theme-on-surface), 0.14);
-	stroke-width: 0.3;
-	stroke-dasharray: 2 2;
+  stroke: rgba(var(--v-theme-on-surface), 0.14);
+  stroke-width: 0.3;
+  stroke-dasharray: 2 2;
 }
 
 .trail {
-	fill: none;
-	stroke-width: 0.9;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	opacity: 0.75;
+  fill: none;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.75;
 }
 
 .marker {
-	stroke: rgb(var(--v-theme-surface));
-	stroke-width: 0.6;
+  stroke: rgb(var(--v-theme-surface));
+  stroke-width: 0.6;
 }
 
 .marker-pulse {
-	opacity: 0.25;
-	animation: world-map-pulse 2s ease-out infinite;
-	transform-origin: center;
-	transform-box: fill-box;
+  opacity: 0.25;
+  animation: world-map-pulse 2s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
 @keyframes world-map-pulse {
-	0% {
-		opacity: 0.35;
-		transform: scale(0.5);
-	}
-	100% {
-		opacity: 0;
-		transform: scale(1.3);
-	}
+  0% {
+    opacity: 0.35;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.marker-pulse {
-		animation: none;
-		opacity: 0.2;
-	}
+  .marker-pulse {
+    animation: none;
+    opacity: 0.2;
+  }
 }
 </style>

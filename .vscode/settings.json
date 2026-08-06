@@ -1,5 +1,26 @@
 {
 	"java.compile.nullAnalysis.mode": "automatic",
 	"cSpell.words": ["springreactive", "tiltedev"],
-	"java.configuration.updateBuildConfiguration": "automatic"
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"editor.detectIndentation": false,
+	"eslint.workingDirectories": [{ "directory": "vue-app" }],
+	"eslint.format.enable": true,
+	"[vue]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[typescript]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	},
+	"[javascript]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
+	}
 }

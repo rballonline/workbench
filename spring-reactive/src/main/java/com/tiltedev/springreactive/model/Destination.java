@@ -1,5 +1,6 @@
 package com.tiltedev.springreactive.model;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,17 +17,14 @@ import java.time.LocalDateTime;
 @Table("destinations")
 public class Destination {
 
-    @Id
-    private Long id;
+    @Id private Long id;
     private String cityName;
     private String countryCode;
     private Double latitude;
     private Double longitude;
     private String addedBy;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @CreatedDate private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @LastModifiedDate private LocalDateTime updatedAt;
 }

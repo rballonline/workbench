@@ -94,7 +94,7 @@
 <script setup lang="ts">
   import type { MapMarker } from '@/components/WorldMap.types'
   import type { Destination } from '@shared/types'
-  import { computed, onMounted } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import ApiErrorAlert from '@/components/ApiErrorAlert.vue'
   import WorldMap from '@/components/WorldMap.vue'
@@ -148,14 +148,25 @@
     (issStore.position?.latitude ?? 0) >= 0 ? 'north' : 'south',
   )
 
+  // issStore.position.timestamp doesn't change between samples, so a plain
+  // computed based on it would never re-evaluate; this tick forces one every second.
+  const now = ref(Date.now())
+  let clockId: ReturnType<typeof setInterval> | undefined
+
+  const ageSeconds = computed(() => {
+    const position = issStore.position
+    if (!position) return null
+    return Math.max(0, Math.round(now.value / 1000 - position.timestamp))
+  })
+
   const stats = computed(() => [
     { labelKey: 'iss.stats.position', value: coordinates.value },
     {
       labelKey: 'iss.stats.age',
       value:
-        issStore.ageSeconds == null
+        ageSeconds.value == null
           ? '-'
-          : t('iss.secondsAgo', { n: issStore.ageSeconds }),
+          : t('iss.secondsAgo', { n: ageSeconds.value }),
     },
     { labelKey: 'iss.stats.samples', value: String(issStore.trail.length) },
     {
@@ -204,14 +215,21 @@
   // means the map is populated immediately instead of after the first tick.
   onMounted(() => {
     if (!issStore.position) issStore.fetchOnce()
+    clockId = setInterval(() => {
+      now.value = Date.now()
+    }, 1000)
+  })
+
+  onUnmounted(() => {
+    clearInterval(clockId)
   })
 </script>
 
 <style scoped>
 .legend-dot {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

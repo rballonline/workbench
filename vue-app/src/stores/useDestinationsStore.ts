@@ -84,10 +84,10 @@ export const useDestinationsStore = defineStore('destinationsStore', {
     },
 
     /**
-		 * Fold a WebSocket event into the list. The event carries the raw entity, which
-		 * has `countryCode` but no nested `country`, so a create is refetched by id to
-		 * pick up the joined country row the list renders.
-		 */
+     * Fold a WebSocket event into the list. The event carries the raw entity, which
+     * has `countryCode` but no nested `country`, so a create is refetched by id to
+     * pick up the joined country row the list renders.
+     */
     async applyEvent (event: DestinationEvent) {
       const { id } = event.destination
 

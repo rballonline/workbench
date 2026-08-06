@@ -131,6 +131,6 @@
 
 <style scoped>
 .min-width-0 {
-	min-width: 0;
+  min-width: 0;
 }
 </style>

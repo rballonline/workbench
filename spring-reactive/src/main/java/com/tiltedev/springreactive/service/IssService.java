@@ -1,15 +1,14 @@
 package com.tiltedev.springreactive.service;
 
-import org.springframework.web.reactive.function.client.WebClient;
 import com.tiltedev.springreactive.dto.response.IssResponse;
 import com.tiltedev.springreactive.dto.result.IssApiResult;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 
 @Slf4j
 @Service
@@ -25,21 +24,32 @@ public class IssService {
 
     public Flux<IssResponse> liveStream() {
         return Flux.interval(Duration.ofSeconds(5))
-                .flatMap(tick -> fetchPosition()
-                        .onErrorResume(e -> {
-                            log.warn("ISS position fetch failed on tick {}: {}", tick, e.getMessage());
-                            return Mono.empty();
-                        })
-                );
+                .flatMap(
+                        tick ->
+                                fetchPosition()
+                                        .onErrorResume(
+                                                e -> {
+                                                    log.warn(
+                                                            "ISS position fetch failed on tick {}: {}",
+                                                            tick,
+                                                            e.getMessage());
+                                                    return Mono.empty();
+                                                }));
     }
 
     private Mono<IssResponse> fetchPosition() {
-        return httpClient.get(issWebClient, "/iss-now.json", IssApiResult.class, uri -> {})
-                .map(result -> IssResponse.builder()
-                        .latitude(Double.parseDouble(result.getIssPosition().getLatitude()))
-                        .longitude(Double.parseDouble(result.getIssPosition().getLongitude()))
-                        .timestamp(result.getTimestamp())
-                        .build()
-                );
+        return httpClient
+                .get(issWebClient, "/iss-now.json", IssApiResult.class, uri -> {})
+                .map(
+                        result ->
+                                IssResponse.builder()
+                                        .latitude(
+                                                Double.parseDouble(
+                                                        result.getIssPosition().getLatitude()))
+                                        .longitude(
+                                                Double.parseDouble(
+                                                        result.getIssPosition().getLongitude()))
+                                        .timestamp(result.getTimestamp())
+                                        .build());
     }
 }

@@ -26,18 +26,17 @@ public class LiveUpdateWebSocketHandler implements WebSocketHandler {
     public Mono<Void> handle(WebSocketSession session) {
         log.debug("WebSocket client connected: {}", session.getId());
 
-        Flux<String> crudStream = eventSink.asFlux()
-                .map(this::toJson);
+        Flux<String> crudStream = eventSink.asFlux().map(this::toJson);
 
-        Flux<String> issStream = issService.liveStream()
-                .map(this::toJson);
+        Flux<String> issStream = issService.liveStream().map(this::toJson);
 
-        return session.send(
-                Flux.merge(crudStream, issStream)
-                        .map(session::textMessage)
-        ).doFinally(signal ->
-                log.debug("WebSocket client disconnected: {} ({})", session.getId(), signal)
-        );
+        return session.send(Flux.merge(crudStream, issStream).map(session::textMessage))
+                .doFinally(
+                        signal ->
+                                log.debug(
+                                        "WebSocket client disconnected: {} ({})",
+                                        session.getId(),
+                                        signal));
     }
 
     private String toJson(Object value) {

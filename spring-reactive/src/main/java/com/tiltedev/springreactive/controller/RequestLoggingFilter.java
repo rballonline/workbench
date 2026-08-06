@@ -1,6 +1,9 @@
 package com.tiltedev.springreactive.controller;
 
 import com.tiltedev.springreactive.service.ReactiveHttpClient;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -12,10 +15,6 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -29,21 +28,31 @@ public class RequestLoggingFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String incomingRequestId = request.getHeaders().getFirst(REQUEST_ID_HEADER);
-        String requestId = StringUtils.hasText(incomingRequestId) ? incomingRequestId : generateRequestId();
+        String requestId =
+                StringUtils.hasText(incomingRequestId) ? incomingRequestId : generateRequestId();
         exchange.getAttributes().put(REQUEST_ID_ATTRIBUTE, requestId);
 
         Instant start = Instant.now();
-        log.info("[{}], Method Type: {}, Request URI: {}, Start Time: {}",
-                requestId, request.getMethod(), request.getURI(), start);
+        log.info(
+                "[{}], Method Type: {}, Request URI: {}, Start Time: {}",
+                requestId,
+                request.getMethod(),
+                request.getURI(),
+                start);
 
         return chain.filter(exchange)
-                .doFinally(signalType -> {
-                    Instant end = Instant.now();
-                    log.info("[{}] Method Type: {}, Request URI: {}, End Time: {}, Elapsed: {}ms, Status: {}",
-                            requestId, request.getMethod(), request.getURI(), end,
-                            Duration.between(start, end).toMillis(),
-                            exchange.getResponse().getStatusCode());
-                })
+                .doFinally(
+                        signalType -> {
+                            Instant end = Instant.now();
+                            log.info(
+                                    "[{}] Method Type: {}, Request URI: {}, End Time: {}, Elapsed: {}ms, Status: {}",
+                                    requestId,
+                                    request.getMethod(),
+                                    request.getURI(),
+                                    end,
+                                    Duration.between(start, end).toMillis(),
+                                    exchange.getResponse().getStatusCode());
+                        })
                 .contextWrite(Context.of(ReactiveHttpClient.REQUEST_ID_CONTEXT_KEY, requestId));
     }
 

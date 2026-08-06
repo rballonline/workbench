@@ -5,5 +5,4 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DestinationRepository extends ReactiveCrudRepository<Destination, Long> {
-}
+public interface DestinationRepository extends ReactiveCrudRepository<Destination, Long> {}

@@ -16,10 +16,6 @@ export const useIssStore = defineStore('issStore', {
   }),
 
   getters: {
-    /** Seconds since the position was sampled, or null when nothing has arrived. */
-    ageSeconds: state =>
-      state.position ? Math.max(0, Math.round(Date.now() / 1000 - state.position.timestamp)) : null,
-
     /**
      * Trail split into runs that don't cross the antimeridian, so an equirectangular
      * plot doesn't draw a line straight back across the map on each wrap.

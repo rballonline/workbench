@@ -97,6 +97,6 @@
 
 <style scoped>
 .bg-surface-variant-subtle {
-	background: rgba(var(--v-theme-on-surface), 0.03);
+  background: rgba(var(--v-theme-on-surface), 0.03);
 }
 </style>

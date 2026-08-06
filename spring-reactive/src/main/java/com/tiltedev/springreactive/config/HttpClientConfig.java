@@ -1,14 +1,11 @@
 package com.tiltedev.springreactive.config;
 
+import java.time.Duration;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-
-/**
- * Tuning for {@code ReactiveHttpClient}. Bound from {@code app.http-client.*}.
- */
+/** Tuning for {@code ReactiveHttpClient}. Bound from {@code app.http-client.*}. */
 @Data
 @Component
 @ConfigurationProperties(prefix = "app.http-client")
@@ -22,15 +19,10 @@ public class HttpClientConfig {
     @Data
     public static class RetryProperties {
 
-        /**
-         * Master switch - when false, a failed call propagates on the first attempt.
-         */
+        /** Master switch - when false, a failed call propagates on the first attempt. */
         private boolean enabled = true;
 
-        /**
-         * Retries attempted <em>after</em> the initial call. 2 means up to 3 total
-         * calls.
-         */
+        /** Retries attempted <em>after</em> the initial call. 2 means up to 3 total calls. */
         private int maxRetries = 2;
 
         /** Delay before the first retry; doubles on each subsequent retry. */
@@ -43,8 +35,8 @@ public class HttpClientConfig {
         private double jitter = 0.5;
 
         /**
-         * When true, only GET/PUT/DELETE are retried. POST is left alone because a
-         * request that timed out may still have been applied on the far side.
+         * When true, only GET/PUT/DELETE are retried. POST is left alone because a request that
+         * timed out may still have been applied on the far side.
          */
         private boolean idempotentOnly = true;
     }

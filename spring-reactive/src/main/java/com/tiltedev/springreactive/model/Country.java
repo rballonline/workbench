@@ -14,8 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("countries")
 public class Country {
 
-    @Id
-    private String code;
+    @Id private String code;
     private String name;
     private String capital;
     private String region;
