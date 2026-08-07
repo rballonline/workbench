@@ -1,7 +1,7 @@
 {
 	"app": {
-		"title": "Places I'd Like to Visit",
-		"subtitle": "Collaborative travel wishlist"
+		"title": "Workbench - Vue Example",
+		"subtitle": "Architecture Showcase"
 	},
 	"common": {
 		"cancel": "Cancel",

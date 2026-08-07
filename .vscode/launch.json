@@ -73,12 +73,28 @@
         "webpack:///./src/*": "${workspaceFolder}/vue-app/src/*",
         "/@fs/*": "/*"
       }
+    },
+    {
+      // Same as "vue-app: Dev server" but waits for spring-reactive to be
+      // listening on 8080 first. Used by the "Full stack" compound so the
+      // frontend doesn't come up before the backend.
+      "type": "node-terminal",
+      "name": "vue-app: Dev server (wait for backend)",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/vue-app",
+      "preLaunchTask": "wait-for-spring-reactive",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
     }
   ],
   "compounds": [
     {
       "name": "Full stack: spring-reactive + vue-app",
-      "configurations": ["spring-reactive: Debug", "vue-app: Dev server"],
+      "configurations": ["spring-reactive: Debug", "vue-app: Dev server (wait for backend)"],
       "stopAll": true,
       "presentation": {
         "group": "1-compounds",

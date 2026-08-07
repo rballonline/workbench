@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Blocks until spring-reactive is accepting connections on 8080.
+      // Used as a preLaunchTask so the "Full stack" compound doesn't start
+      // vue-app until the backend is actually up.
+      "label": "wait-for-spring-reactive",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "while ($true) { try { (New-Object Net.Sockets.TcpClient('localhost', 8080)).Close(); break } catch { Start-Sleep -Seconds 1 } }"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
