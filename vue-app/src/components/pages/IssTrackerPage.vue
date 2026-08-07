@@ -211,7 +211,7 @@
     },
   )
 
-  // The WebSocket pushes a fresh position every 5 seconds, but a one-shot REST read
+  // The WebSocket pushes a fresh position every 30 seconds, but a one-shot REST read
   // means the map is populated immediately instead of after the first tick.
   onMounted(() => {
     if (!issStore.position) issStore.fetchOnce()

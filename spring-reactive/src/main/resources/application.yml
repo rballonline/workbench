@@ -17,6 +17,12 @@ spring:
         provider:
           my-api:
             token-uri: https://your-auth-server.example.com/oauth2/token
+  autoconfigure:
+    # No server-side Anthropic key - the assistant is bring-your-own-key, so each
+    # ChatClient is built per-request in AssistantChatClientFactory instead of from
+    # a singleton autoconfigured ChatModel. Without this exclude, AnthropicChatAutoConfiguration
+    # still stands up an unused AnthropicChatModel with no api-key.
+    exclude: org.springframework.ai.model.anthropic.autoconfigure.AnthropicChatAutoConfiguration
   ai:
     mcp:
       server:
@@ -28,6 +34,8 @@ spring:
           enabled: true
 
 app:
+  iss:
+    poll-interval: 30s
   restcountries:
     api-key: ${restcountries-api-key}
   http-client:

@@ -47,6 +47,82 @@
     </v-card>
 
     <v-card class="mb-6" elevation="1">
+      <v-card-title class="text-subtitle-1 pa-4 pb-0">{{ t('settings.aiHeading') }}</v-card-title>
+
+      <v-card-text class="pa-4">
+        <p class="text-caption text-medium-emphasis mb-3">{{ t('settings.aiNote') }}</p>
+
+        <v-alert
+          v-if="verifyError"
+          class="mb-3"
+          closable
+          density="compact"
+          type="error"
+          variant="tonal"
+          @click:close="verifyError = null"
+        >
+          {{ verifyError }}
+        </v-alert>
+
+        <div v-if="editingKey" class="d-flex flex-wrap ga-2 align-start">
+          <v-text-field
+            v-model="keyDraft"
+            class="flex-grow-1"
+            density="comfortable"
+            :disabled="verifying"
+            hide-details="auto"
+            :label="t('settings.aiKeyLabel')"
+            placeholder="sk-ant-..."
+            prepend-inner-icon="mdi-key-outline"
+            style="min-width: 240px"
+            type="password"
+            @keyup.enter="verifyAndSaveKey"
+          />
+
+          <v-btn
+            color="primary"
+            :disabled="!keyDraft.trim()"
+            :loading="verifying"
+            variant="flat"
+            @click="verifyAndSaveKey"
+          >
+            {{ t('settings.aiKeyVerify') }}
+          </v-btn>
+
+          <v-btn
+            v-if="userStore.hasAiApiKey"
+            :disabled="verifying"
+            variant="text"
+            @click="cancelEdit"
+          >
+            {{ t('common.cancel') }}
+          </v-btn>
+        </div>
+
+        <div v-else>
+          <v-text-field
+            append-inner-icon="mdi-check-circle"
+            color="success"
+            density="comfortable"
+            disabled
+            hide-details="auto"
+            :label="t('settings.aiKeyLabel')"
+            :model-value="maskedKey"
+            prepend-inner-icon="mdi-key-outline"
+          />
+
+          <div class="d-flex align-center justify-space-between mt-2">
+            <span class="text-caption text-medium-emphasis">{{ verifiedLabel }}</span>
+
+            <v-btn size="small" variant="text" @click="changeKey">
+              {{ t('settings.aiKeyChange') }}
+            </v-btn>
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <v-card class="mb-6" elevation="1">
       <v-card-title class="text-subtitle-1 pa-4 pb-0">{{ t('settings.backend') }}</v-card-title>
 
       <v-card-text class="pa-4">
@@ -127,16 +203,17 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import LiveStatusChip from '@/components/LiveStatusChip.vue'
+  import { ApiError, useApi } from '@/composables/useApi'
   import { useAppContext } from '@/composables/useAppContext'
   import { useLiveUpdates } from '@/composables/useLiveUpdates'
   import { SUPPORTED_LOCALES } from '@/plugins/i18n'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
   import { useUserStore } from '@/stores/useUserStore'
 
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const context = useAppContext()
   const { reconnect } = useLiveUpdates()
   const userStore = useUserStore()
@@ -153,6 +230,78 @@
   })
 
   const localeItems = SUPPORTED_LOCALES.map(l => ({ title: `${l.flag}  ${l.label}`, value: l.code }))
+
+  // Starts in edit mode when no key is saved yet; otherwise the field opens locked,
+  // showing what was last confirmed against Anthropic.
+  const keyDraft = ref('')
+  const editingKey = ref(!userStore.hasAiApiKey)
+  const verifying = ref(false)
+  const verifyError = ref<string | null>(null)
+
+  const maskedKey = computed(() => {
+    const key = userStore.aiApiKey
+    return key.length > 4 ? `••••••••${key.slice(-4)}` : '••••••••'
+  })
+
+  const verifiedLabel = computed(() => {
+    if (!userStore.aiApiKeyValidatedAt) {
+      return ''
+    }
+    return t('settings.aiKeyVerified', { time: formatRelativeTime(userStore.aiApiKeyValidatedAt, locale.value) })
+  })
+
+  function formatRelativeTime (iso: string, localeCode: string): string {
+    const diffMs = Date.parse(iso) - Date.now()
+    const rtf = new Intl.RelativeTimeFormat(localeCode, { numeric: 'auto' })
+    const diffMinutes = Math.round(diffMs / 60_000)
+    if (Math.abs(diffMinutes) < 60) {
+      return rtf.format(diffMinutes, 'minute')
+    }
+    const diffHours = Math.round(diffMs / 3_600_000)
+    if (Math.abs(diffHours) < 24) {
+      return rtf.format(diffHours, 'hour')
+    }
+    return rtf.format(Math.round(diffMs / 86_400_000), 'day')
+  }
+
+  async function verifyAndSaveKey () {
+    const key = keyDraft.value.trim()
+    if (!key) {
+      return
+    }
+
+    verifying.value = true
+    verifyError.value = null
+
+    try {
+      const { validatedAt } = await useApi().validateApiKey(key)
+      userStore.setAiApiKey(key, validatedAt)
+      keyDraft.value = ''
+      editingKey.value = false
+    } catch (error) {
+      if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+        verifyError.value = t('settings.aiKeyInvalid')
+      } else if (error instanceof ApiError && error.status === 0) {
+        verifyError.value = t('settings.aiKeyUnreachable')
+      } else {
+        verifyError.value = t('settings.aiKeyCheckFailed')
+      }
+    } finally {
+      verifying.value = false
+    }
+  }
+
+  function changeKey () {
+    keyDraft.value = ''
+    verifyError.value = null
+    editingKey.value = true
+  }
+
+  function cancelEdit () {
+    keyDraft.value = ''
+    verifyError.value = null
+    editingKey.value = false
+  }
 
   const ENDPOINTS = [
     { path: 'GET  /api/destinations', page: 'wishlist' },

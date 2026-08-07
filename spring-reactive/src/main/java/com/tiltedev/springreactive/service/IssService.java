@@ -1,8 +1,8 @@
 package com.tiltedev.springreactive.service;
 
+import com.tiltedev.springreactive.config.IssProperties;
 import com.tiltedev.springreactive.dto.response.IssResponse;
 import com.tiltedev.springreactive.dto.result.IssApiResult;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,14 @@ public class IssService {
 
   private final ReactiveHttpClient httpClient;
   private final WebClient issWebClient;
+  private final IssProperties issProperties;
 
   public Mono<IssResponse> getCurrentPosition() {
     return fetchPosition();
   }
 
   public Flux<IssResponse> liveStream() {
-    return Flux.interval(Duration.ofSeconds(5))
+    return Flux.interval(issProperties.getPollInterval())
         .flatMap(
             tick ->
                 fetchPosition()

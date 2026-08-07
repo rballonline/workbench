@@ -35,6 +35,18 @@ public class WebClientConfig {
   }
 
   /**
+   * Base client for Anthropic calls - no {@code x-api-key} header here since that is
+   * bring-your-own-key per request, not app config. Callers mutate in the header per call.
+   */
+  @Bean
+  public WebClient anthropicWebClient() {
+    return WebClient.builder()
+        .baseUrl("https://api.anthropic.com")
+        .defaultHeader("anthropic-version", "2023-06-01")
+        .build();
+  }
+
+  /**
    * OAuth2-authenticated client for machine-to-machine calls. Configure
    * spring.security.oauth2.client.* properties to point at your provider. This client fetches and
    * caches a client-credentials token automatically.

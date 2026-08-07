@@ -13,6 +13,7 @@ A collaborative travel wishlist. Users search for cities, pick one, and add it t
 - **Lombok** - `@Data`, `@Builder`, `@Slf4j` on all components
 - **SpringDoc OpenAPI** - Swagger UI at `/swagger-ui.html`, spec at `/v3/api-docs`
 - **Spring AI MCP Server (WebFlux, ASYNC)** - exposes app features as MCP tools at `/mcp`
+- **Spring AI Anthropic + ChatClient** - powers the in-app AI assistant at `POST /api/assistant/chat`
 
 ## Code Standards
 
@@ -79,7 +80,7 @@ geocodeCity(name)           → Open-Meteo geocoding: city name → {lat, lon}
 Each connected session receives a merged stream of:
 
 1. **CRUD events** - emitted by `DestinationService` via `Sinks.Many<DestinationEvent>` on every create/delete
-2. **ISS position** - polled every 5 seconds from Open Notify
+2. **ISS position** - polled from Open Notify on an interval configured via `app.iss.poll-interval` (`application.yml`, default 30s)
 
 Event JSON shape:
 
@@ -103,6 +104,47 @@ Mutations: `addDestination(cityName, countryCode, latitude, longitude, addedBy)`
 Tools: `search_cities`, `get_weather`, `get_country`, `get_iss_position`, `list_destinations`, `add_destination`, `remove_destination`.
 
 Endpoint: `http://localhost:8080/mcp` (streamable HTTP transport).
+
+## AI Assistant
+
+`POST /api/assistant/chat` - `{ conversationId, message, apiKey }` in, `text/event-stream` out.
+Backs the chat widget in vue-app. **Bring-your-own-key**: there is no server-side default
+Anthropic key. `apiKey` comes from the caller's browser (`useUserStore.aiApiKey` on the frontend)
+and is required on every request (`@NotBlank`) - the app has no auth/sessions to hang a
+per-user server-stored key off of, so this follows the same pattern as `addedBy`: a
+client-remembered value, not an account. `AnthropicChatAutoConfiguration` is excluded via
+`spring.autoconfigure.exclude` in `application.yml` so no dangling keyless `AnthropicChatModel`
+bean gets created at startup.
+
+- `ai/AssistantTools.java` - `@Tool`-annotated methods Spring AI's `ChatClient` calls directly.
+  These are **separate, blocking wrappers** around the same services `mcp/TravelMcpTools` wraps
+  reactively - `ChatClient` tool calling invokes methods synchronously via reflection (dispatched
+  on `Schedulers.boundedElastic()`, confirmed in `ToolCallingAdvisor`), so a method returning
+  `Mono`/`Flux` would have the publisher itself serialized as the tool result instead of its
+  resolved value. Each tool here therefore ends in `.block()`.
+- `remove_destination` is deliberately **not** a directly-callable tool here (unlike the MCP
+  server, which does expose a real one for trusted external clients). `propose_remove_destination`
+  only looks up the destination and stashes a `PendingDeleteConfirmation` onto a `ToolContext`
+  map keyed by `AssistantTools.PENDING_DELETE_CONFIRMATIONS_KEY` - `AiChatService` reads that
+  list back after the model's turn and emits it as a `confirm-delete` SSE event. The frontend
+  renders a confirm button that calls `DELETE /api/destinations/{id}` directly; the AI never
+  performs the delete itself.
+- `ai/AssistantChatClientFactory.java` - builds a fresh `ChatClient` **per request**, not a
+  singleton bean: `forApiKey(String)` constructs `AnthropicChatOptions` + `AnthropicChatModel`
+  straight from the caller's key (`ChatClient.builder(chatModel)` - no dependency on any
+  autoconfigured `ChatClient.Builder`), then wires in the system prompt, `AssistantTools`, and a
+  `MessageChatMemoryAdvisor` (using the `ChatMemory` bean auto-configured by
+  `spring-ai-autoconfigure-model-chat-memory`, in-process/non-persistent, unrelated to the
+  per-request model).
+- `service/AiChatService.java` - streams `chatClient.prompt()...stream().content()` as `event:
+  token` SSE frames, appends any pending delete confirmations as `event: confirm-delete` frames
+  (JSON `PendingDeleteConfirmation`), and wraps the whole thing in `onErrorResume` to emit an
+  `event: error` frame instead of letting an exception hit the stream after headers are sent
+  (`GlobalExceptionHandler`'s `ProblemDetail` responses don't fit mid-stream). A bad/expired key
+  surfaces this way too - Anthropic's 401 becomes the same generic error frame, not a distinct
+  message; that's a reasonable place to improve later.
+- `ChatRequest.apiKey` is `@ToString.Exclude` so it can never leak into a stray `log.debug("{}",
+  request)`-style call; `RequestLoggingFilter` only ever logs method/URI/status, never bodies.
 
 ## OpenAPI / Swagger
 

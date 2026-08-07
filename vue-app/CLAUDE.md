@@ -20,7 +20,7 @@ The structure is deliberately modelled on `C:\Code\gangsheet-builder` - same sta
 - `src/components/` - `AppShell.vue` is the root; `pages/` holds one component per page
 - `src/router/` - the Vue Router instance and route table
 - `src/composables/` - `useApi`, `useAppContext`, `useLiveUpdates`
-- `src/stores/` - `useDestinationsStore`, `useIssStore`, `useUserStore`
+- `src/stores/` - `useDestinationsStore`, `useIssStore`, `useUserStore`, `useAssistantStore`
 - `src/utils/weatherCodes.ts` - WMO code → icon/label mapping
 - `src/locales/` - `en.json`, `es.json`
 
@@ -83,6 +83,7 @@ Hand-maintained; there is no codegen. Two shapes to watch:
 - `WorldMap.vue` - dependency-free equirectangular SVG. The viewBox is literally `0 0 360 180` degrees, so projecting is `x = lon + 180`, `y = 90 - lat`. Drawn as a graticule; there is no bundled coastline geometry and no map tiles. Trails must be pre-split at the antimeridian (`useIssStore.trailSegments` does this) or a wrap draws a line back across the map.
 - `CitySearchField.vue` - debounced autocomplete with a monotonic request token so a slow earlier response cannot overwrite a newer one. Enforces the backend's `@Size(min = 2)` client-side rather than earning a 400.
 - `ApiErrorAlert.vue` - renders an `ApiFailure`; takes an optional `not-found` prop for page-specific 404 wording.
+- `AiAssistantPanel.vue` - the AI chat widget, opened from an app-bar icon into a right-hand drawer owned by `AppShell`. **Bring-your-own-key**: `userStore.aiApiKey` (set on the Settings page, persisted) is required and sent with every request - there is no server-side default. Without a key the panel shows a call-to-action instead of the chat input. `useAssistantStore` hand-parses the `POST /api/assistant/chat` `text/event-stream` response itself (not `EventSource`, which can't send a POST body) into `token` / `confirm-delete` / `error` frames.
 
 ## Dev workflow
 

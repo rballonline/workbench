@@ -112,6 +112,45 @@ export function isDestinationEvent (msg: LiveMessage): msg is DestinationEvent {
   return typeof (msg as DestinationEvent).action === 'string'
 }
 
+/**
+ * `dto/request/ChatRequest` - POST /api/assistant/chat.
+ * Bring-your-own-key: there is no server-side default, so `apiKey` is required on
+ * every request. It comes from `useUserStore.aiApiKey` and never gets logged - see
+ * `@ToString.Exclude` on the backend field.
+ */
+export interface ChatRequest {
+  conversationId: string
+  message: string
+  apiKey: string
+}
+
+/**
+ * `dto/response/ApiKeyValidationResponse` - POST /api/assistant/validate-key.
+ * A bad key throws server-side (Anthropic's 401 flows through as an `ApiError` with
+ * `status: 401`, same as any other upstream rejection) rather than coming back as a
+ * `valid: false` field on this shape.
+ */
+export interface ApiKeyValidationResponse {
+  validatedAt: string
+}
+
+/**
+ * `dto/event/PendingDeleteConfirmation` - the `confirm-delete` SSE event emitted by
+ * POST /api/assistant/chat. The assistant only ever proposes a removal; deleting for
+ * real means calling `DELETE /api/destinations/{id}` directly, same as a manual edit.
+ */
+export interface PendingDeleteConfirmation {
+  id: number
+  cityName: string
+}
+
+/** One turn in the assistant chat widget. Not a backend DTO - assembled client-side from SSE frames. */
+export interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+  pendingConfirms: PendingDeleteConfirmation[]
+}
+
 /** RFC 7807 body produced by `GlobalExceptionHandler`. */
 export interface ProblemDetail {
   type?: string

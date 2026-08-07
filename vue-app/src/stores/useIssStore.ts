@@ -2,8 +2,8 @@ import type { IssPosition } from '@shared/types'
 import { defineStore } from 'pinia'
 import { type ApiFailure, classifyError, useApi } from '@/composables/useApi'
 
-/** Roughly 25 minutes of trail at the backend's 5-second poll interval. */
-const MAX_TRAIL_POINTS = 300
+/** Roughly 25 minutes of trail at the backend's 30-second poll interval. */
+const MAX_TRAIL_POINTS = 50
 
 export const useIssStore = defineStore('issStore', {
   state: () => ({

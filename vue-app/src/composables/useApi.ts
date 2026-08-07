@@ -1,5 +1,7 @@
 import type {
   AddDestinationRequest,
+  ApiKeyValidationResponse,
+  ChatRequest,
   CitySearchResult,
   CountryApiResult,
   Destination,
@@ -158,5 +160,21 @@ export function useApi () {
 
     // GET /api/iss
     getIssPosition: () => getJson<IssPosition>('/api/iss'),
+
+    // POST /api/assistant/chat - text/event-stream; caller reads the raw body itself
+    streamChat: (body: ChatRequest): Promise<Response> =>
+      apiFetch('/api/assistant/chat', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+
+    // POST /api/assistant/validate-key - throws ApiError(401) for a bad key
+    validateApiKey: async (apiKey: string): Promise<ApiKeyValidationResponse> => {
+      const res = await apiFetch('/api/assistant/validate-key', {
+        method: 'POST',
+        body: JSON.stringify({ apiKey }),
+      })
+      return res.json() as Promise<ApiKeyValidationResponse>
+    },
   }
 }

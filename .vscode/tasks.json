@@ -6,7 +6,7 @@
       // Used as a preLaunchTask so the "Full stack" compound doesn't start
       // vue-app until the backend is actually up.
       "label": "wait-for-spring-reactive",
-      "type": "shell",
+      "type": "process",
       "command": "powershell",
       "args": [
         "-NoProfile",

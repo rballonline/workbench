@@ -12,6 +12,14 @@
         <LocaleSelector class="mr-1" />
 
         <v-btn
+          :aria-label="t('assistant.title')"
+          density="comfortable"
+          icon="mdi-robot-outline"
+          variant="text"
+          @click="assistantStore.toggle()"
+        />
+
+        <v-btn
           :aria-label="t('common.toggleTheme')"
           density="comfortable"
           :icon="
@@ -24,6 +32,15 @@
         />
       </template>
     </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="assistantStore.isOpen"
+      location="right"
+      temporary
+      width="400"
+    >
+      <AiAssistantPanel />
+    </v-navigation-drawer>
 
     <v-main class="bg-surface-variant-subtle">
       <router-view v-slot="{ Component }">
@@ -51,9 +68,11 @@
   import { useRoute } from 'vue-router'
   import { provideAppContext } from '@/composables/useAppContext'
   import { useLiveUpdates } from '@/composables/useLiveUpdates'
+  import { useAssistantStore } from '@/stores/useAssistantStore'
   import { useDestinationsStore } from '@/stores/useDestinationsStore'
   import { useIssStore } from '@/stores/useIssStore'
   import { useUserStore } from '@/stores/useUserStore'
+  import AiAssistantPanel from './AiAssistantPanel.vue'
   import AppSidebar from './AppSidebar.vue'
   import LiveStatusChip from './LiveStatusChip.vue'
   import LocaleSelector from './LocaleSelector.vue'
@@ -66,6 +85,7 @@
   const userStore = useUserStore()
   const destinationsStore = useDestinationsStore()
   const issStore = useIssStore()
+  const assistantStore = useAssistantStore()
 
   // The locale the user picked last session; applied once Pinia has rehydrated.
   locale.value = userStore.locale

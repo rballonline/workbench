@@ -18,7 +18,6 @@ import reactor.core.publisher.Sinks;
 @Configuration
 public class WebSocketConfig {
 
-
   @Bean
   public Sinks.Many<DestinationEvent> destinationEventSink() {
     return Sinks.many().multicast().onBackpressureBuffer();

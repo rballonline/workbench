@@ -9,6 +9,18 @@ export const useUserStore = defineStore('userStore', {
     displayName: '' as string,
     locale: 'en' as string,
     theme: 'light' as 'light' | 'dark',
+    /**
+     * Bring-your-own-key for the AI assistant - the backend has no server-side
+     * default, so this is required before the assistant works at all. Stored the
+     * same way as the rest of this store (persisted plaintext in localStorage);
+     * it is sent with every assistant chat request and never touches any other
+     * endpoint. Only ever set via `setAiApiKey` after the Settings page has
+     * confirmed it against `POST /api/assistant/validate-key` - there is no
+     * unvalidated-but-present state.
+     */
+    aiApiKey: '' as string,
+    /** ISO timestamp of the last successful validation; null iff `aiApiKey` is empty. */
+    aiApiKeyValidatedAt: null as string | null,
   }),
 
   getters: {
@@ -19,6 +31,8 @@ export const useUserStore = defineStore('userStore', {
         : undefined,
 
     hasName: state => state.displayName.trim().length > 0,
+
+    hasAiApiKey: state => state.aiApiKey.trim().length > 0,
   },
 
   actions: {
@@ -31,9 +45,17 @@ export const useUserStore = defineStore('userStore', {
     toggleTheme () {
       this.theme = this.theme === 'light' ? 'dark' : 'light'
     },
+    setAiApiKey (key: string, validatedAt: string) {
+      this.aiApiKey = key
+      this.aiApiKeyValidatedAt = validatedAt
+    },
+    clearAiApiKey () {
+      this.aiApiKey = ''
+      this.aiApiKeyValidatedAt = null
+    },
   },
 
   persist: {
-    pick: ['displayName', 'locale', 'theme'],
+    pick: ['displayName', 'locale', 'theme', 'aiApiKey', 'aiApiKeyValidatedAt'],
   },
 })
