@@ -7,12 +7,12 @@ import lombok.Data;
 @Builder
 public class WeatherResponse {
 
-    private String cityName;
-    private String countryName;
-    private Double latitude;
-    private Double longitude;
-    private Double temperatureCelsius;
-    private Double windSpeedKmh;
-    private Integer humidity;
-    private Integer weatherCode;
+  private String cityName;
+  private String countryName;
+  private Double latitude;
+  private Double longitude;
+  private Double temperatureCelsius;
+  private Double windSpeedKmh;
+  private Integer humidity;
+  private Integer weatherCode;
 }

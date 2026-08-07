@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class WeatherController {
 
-    private final WeatherService service;
+  private final WeatherService service;
 
-    @GetMapping("/city/{cityName}")
-    public Mono<WeatherResponse> getWeatherByCity(@PathVariable String cityName) {
-        return service.getWeatherByCity(cityName);
-    }
+  @GetMapping("/city/{cityName}")
+  public Mono<WeatherResponse> getWeatherByCity(@PathVariable String cityName) {
+    return service.getWeatherByCity(cityName);
+  }
 }

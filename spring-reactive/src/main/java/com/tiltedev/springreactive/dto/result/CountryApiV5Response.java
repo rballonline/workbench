@@ -8,11 +8,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountryApiV5Response {
 
-    private Payload data;
+  private Payload data;
 
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Payload {
-        private List<CountryApiResult> objects;
-    }
+  @Data
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class Payload {
+    private List<CountryApiResult> objects;
+  }
 }

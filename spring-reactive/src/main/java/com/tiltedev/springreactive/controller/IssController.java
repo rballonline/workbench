@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class IssController {
 
-    private final IssService service;
+  private final IssService service;
 
-    @GetMapping
-    public Mono<IssResponse> getCurrentPosition() {
-        return service.getCurrentPosition();
-    }
+  @GetMapping
+  public Mono<IssResponse> getCurrentPosition() {
+    return service.getCurrentPosition();
+  }
 }

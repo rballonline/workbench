@@ -7,10 +7,10 @@ import lombok.Data;
 @Builder
 public class CountryResponse {
 
-    private String code;
-    private String name;
-    private String capital;
-    private String region;
-    private Long population;
-    private String flagUrl;
+  private String code;
+  private String name;
+  private String capital;
+  private String region;
+  private Long population;
+  private String flagUrl;
 }

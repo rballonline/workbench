@@ -8,16 +8,16 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IssApiResult {
 
-    private String message;
-    private long timestamp;
+  private String message;
+  private long timestamp;
 
-    @JsonProperty("iss_position")
-    private IssPosition issPosition;
+  @JsonProperty("iss_position")
+  private IssPosition issPosition;
 
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class IssPosition {
-        private String latitude;
-        private String longitude;
-    }
+  @Data
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class IssPosition {
+    private String latitude;
+    private String longitude;
+  }
 }

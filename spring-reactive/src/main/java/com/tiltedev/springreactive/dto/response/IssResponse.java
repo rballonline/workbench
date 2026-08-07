@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class IssResponse {
 
-    private Double latitude;
-    private Double longitude;
-    private Long timestamp;
+  private Double latitude;
+  private Double longitude;
+  private Long timestamp;
 }

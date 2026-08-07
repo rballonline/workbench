@@ -14,21 +14,21 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http.csrf(
-                        ServerHttpSecurity.CsrfSpec
-                                ::disable) // stateless API - no session cookies, so no CSRF surface
-                .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
-                .build();
-    }
+  @Bean
+  public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    return http.csrf(
+            ServerHttpSecurity.CsrfSpec
+                ::disable) // stateless API - no session cookies, so no CSRF surface
+        .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
+        .build();
+  }
 
-    @Bean
-    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
-            ReactiveClientRegistrationRepository registrationRepository,
-            ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+  @Bean
+  public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+      ReactiveClientRegistrationRepository registrationRepository,
+      ReactiveOAuth2AuthorizedClientService authorizedClientService) {
 
-        return new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
-                registrationRepository, authorizedClientService);
-    }
+    return new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+        registrationRepository, authorizedClientService);
+  }
 }

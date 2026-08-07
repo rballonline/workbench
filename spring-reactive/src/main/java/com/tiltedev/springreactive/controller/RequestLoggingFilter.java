@@ -21,42 +21,43 @@ import reactor.util.context.Context;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestLoggingFilter implements WebFilter {
 
-    public static final String REQUEST_ID_ATTRIBUTE = "requestId";
-    private static final String REQUEST_ID_HEADER = "X-Request-Id";
+  public static final String REQUEST_ID_ATTRIBUTE = "requestId";
+  private static final String REQUEST_ID_HEADER = "X-Request-Id";
 
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String incomingRequestId = request.getHeaders().getFirst(REQUEST_ID_HEADER);
-        String requestId =
-                StringUtils.hasText(incomingRequestId) ? incomingRequestId : generateRequestId();
-        exchange.getAttributes().put(REQUEST_ID_ATTRIBUTE, requestId);
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    ServerHttpRequest request = exchange.getRequest();
+    String incomingRequestId = request.getHeaders().getFirst(REQUEST_ID_HEADER);
+    String requestId =
+        StringUtils.hasText(incomingRequestId) ? incomingRequestId : generateRequestId();
+    exchange.getAttributes().put(REQUEST_ID_ATTRIBUTE, requestId);
 
-        Instant start = Instant.now();
-        log.info(
-                "[{}], Method Type: {}, Request URI: {}, Start Time: {}",
-                requestId,
-                request.getMethod(),
-                request.getURI(),
-                start);
+    Instant start = Instant.now();
+    log.info(
+        "[{}], Method Type: {}, Request URI: {}, Start Time: {}",
+        requestId,
+        request.getMethod(),
+        request.getURI(),
+        start);
 
-        return chain.filter(exchange)
-                .doFinally(
-                        signalType -> {
-                            Instant end = Instant.now();
-                            log.info(
-                                    "[{}] Method Type: {}, Request URI: {}, End Time: {}, Elapsed: {}ms, Status: {}",
-                                    requestId,
-                                    request.getMethod(),
-                                    request.getURI(),
-                                    end,
-                                    Duration.between(start, end).toMillis(),
-                                    exchange.getResponse().getStatusCode());
-                        })
-                .contextWrite(Context.of(ReactiveHttpClient.REQUEST_ID_CONTEXT_KEY, requestId));
-    }
+    return chain
+        .filter(exchange)
+        .doFinally(
+            signalType -> {
+              Instant end = Instant.now();
+              log.info(
+                  "[{}] Method Type: {}, Request URI: {}, End Time: {}, Elapsed: {}ms, Status: {}",
+                  requestId,
+                  request.getMethod(),
+                  request.getURI(),
+                  end,
+                  Duration.between(start, end).toMillis(),
+                  exchange.getResponse().getStatusCode());
+            })
+        .contextWrite(Context.of(ReactiveHttpClient.REQUEST_ID_CONTEXT_KEY, requestId));
+  }
 
-    private static String generateRequestId() {
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-    }
+  private static String generateRequestId() {
+    return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+  }
 }

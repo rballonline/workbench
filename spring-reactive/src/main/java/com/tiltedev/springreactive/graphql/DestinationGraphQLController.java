@@ -17,37 +17,37 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class DestinationGraphQLController {
 
-    private final DestinationService service;
+  private final DestinationService service;
 
-    @QueryMapping
-    public Flux<DestinationResponse> destinations() {
-        return service.findAll();
-    }
+  @QueryMapping
+  public Flux<DestinationResponse> destinations() {
+    return service.findAll();
+  }
 
-    @QueryMapping
-    public Mono<DestinationResponse> destination(@Argument Long id) {
-        return service.findById(id);
-    }
+  @QueryMapping
+  public Mono<DestinationResponse> destination(@Argument Long id) {
+    return service.findById(id);
+  }
 
-    @MutationMapping
-    public Mono<DestinationResponse> addDestination(
-            @Argument String cityName,
-            @Argument String countryCode,
-            @Argument Double latitude,
-            @Argument Double longitude,
-            @Argument String addedBy) {
+  @MutationMapping
+  public Mono<DestinationResponse> addDestination(
+      @Argument String cityName,
+      @Argument String countryCode,
+      @Argument Double latitude,
+      @Argument Double longitude,
+      @Argument String addedBy) {
 
-        AddDestinationRequest request = new AddDestinationRequest();
-        request.setCityName(cityName);
-        request.setCountryCode(countryCode);
-        request.setLatitude(latitude);
-        request.setLongitude(longitude);
-        request.setAddedBy(addedBy);
-        return service.create(request);
-    }
+    AddDestinationRequest request = new AddDestinationRequest();
+    request.setCityName(cityName);
+    request.setCountryCode(countryCode);
+    request.setLatitude(latitude);
+    request.setLongitude(longitude);
+    request.setAddedBy(addedBy);
+    return service.create(request);
+  }
 
-    @MutationMapping
-    public Mono<Boolean> removeDestination(@Argument Long id) {
-        return service.delete(id).thenReturn(true);
-    }
+  @MutationMapping
+  public Mono<Boolean> removeDestination(@Argument Long id) {
+    return service.delete(id).thenReturn(true);
+  }
 }

@@ -15,41 +15,35 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class IssService {
 
-    private final ReactiveHttpClient httpClient;
-    private final WebClient issWebClient;
+  private final ReactiveHttpClient httpClient;
+  private final WebClient issWebClient;
 
-    public Mono<IssResponse> getCurrentPosition() {
-        return fetchPosition();
-    }
+  public Mono<IssResponse> getCurrentPosition() {
+    return fetchPosition();
+  }
 
-    public Flux<IssResponse> liveStream() {
-        return Flux.interval(Duration.ofSeconds(5))
-                .flatMap(
-                        tick ->
-                                fetchPosition()
-                                        .onErrorResume(
-                                                e -> {
-                                                    log.warn(
-                                                            "ISS position fetch failed on tick {}: {}",
-                                                            tick,
-                                                            e.getMessage());
-                                                    return Mono.empty();
-                                                }));
-    }
+  public Flux<IssResponse> liveStream() {
+    return Flux.interval(Duration.ofSeconds(5))
+        .flatMap(
+            tick ->
+                fetchPosition()
+                    .onErrorResume(
+                        e -> {
+                          log.warn(
+                              "ISS position fetch failed on tick {}: {}", tick, e.getMessage());
+                          return Mono.empty();
+                        }));
+  }
 
-    private Mono<IssResponse> fetchPosition() {
-        return httpClient
-                .get(issWebClient, "/iss-now.json", IssApiResult.class, uri -> {})
-                .map(
-                        result ->
-                                IssResponse.builder()
-                                        .latitude(
-                                                Double.parseDouble(
-                                                        result.getIssPosition().getLatitude()))
-                                        .longitude(
-                                                Double.parseDouble(
-                                                        result.getIssPosition().getLongitude()))
-                                        .timestamp(result.getTimestamp())
-                                        .build());
-    }
+  private Mono<IssResponse> fetchPosition() {
+    return httpClient
+        .get(issWebClient, "/iss-now.json", IssApiResult.class, uri -> {})
+        .map(
+            result ->
+                IssResponse.builder()
+                    .latitude(Double.parseDouble(result.getIssPosition().getLatitude()))
+                    .longitude(Double.parseDouble(result.getIssPosition().getLongitude()))
+                    .timestamp(result.getTimestamp())
+                    .build());
+  }
 }

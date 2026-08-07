@@ -8,12 +8,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class DestinationEvent {
 
-    public enum Action {
-        CREATED,
-        UPDATED,
-        DELETED
-    }
+  public enum Action {
+    CREATED,
+    UPDATED,
+    DELETED
+  }
 
-    private Action action;
-    private Destination destination;
+  private Action action;
+  private Destination destination;
 }

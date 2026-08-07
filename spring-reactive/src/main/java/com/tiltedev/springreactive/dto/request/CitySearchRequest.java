@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CitySearchRequest {
 
-    @NotBlank
-    @Size(min = 2, max = 100)
-    private String q;
+  @NotBlank
+  @Size(min = 2, max = 100)
+  private String q;
 }

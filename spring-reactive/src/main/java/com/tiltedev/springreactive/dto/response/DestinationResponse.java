@@ -8,11 +8,11 @@ import lombok.Data;
 @Builder
 public class DestinationResponse {
 
-    private Long id;
-    private String cityName;
-    private Double latitude;
-    private Double longitude;
-    private String addedBy;
-    private LocalDateTime createdAt;
-    private CountryResponse country;
+  private Long id;
+  private String cityName;
+  private Double latitude;
+  private Double longitude;
+  private String addedBy;
+  private LocalDateTime createdAt;
+  private CountryResponse country;
 }

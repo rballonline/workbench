@@ -18,33 +18,30 @@ import reactor.core.publisher.Sinks;
 @RequiredArgsConstructor
 public class LiveUpdateWebSocketHandler implements WebSocketHandler {
 
-    private final Sinks.Many<DestinationEvent> eventSink;
-    private final IssService issService;
-    private final ObjectMapper objectMapper;
+  private final Sinks.Many<DestinationEvent> eventSink;
+  private final IssService issService;
+  private final ObjectMapper objectMapper;
 
-    @Override
-    public Mono<Void> handle(WebSocketSession session) {
-        log.debug("WebSocket client connected: {}", session.getId());
+  @Override
+  public Mono<Void> handle(WebSocketSession session) {
+    log.debug("WebSocket client connected: {}", session.getId());
 
-        Flux<String> crudStream = eventSink.asFlux().map(this::toJson);
+    Flux<String> crudStream = eventSink.asFlux().map(this::toJson);
 
-        Flux<String> issStream = issService.liveStream().map(this::toJson);
+    Flux<String> issStream = issService.liveStream().map(this::toJson);
 
-        return session.send(Flux.merge(crudStream, issStream).map(session::textMessage))
-                .doFinally(
-                        signal ->
-                                log.debug(
-                                        "WebSocket client disconnected: {} ({})",
-                                        session.getId(),
-                                        signal));
+    return session
+        .send(Flux.merge(crudStream, issStream).map(session::textMessage))
+        .doFinally(
+            signal -> log.debug("WebSocket client disconnected: {} ({})", session.getId(), signal));
+  }
+
+  private String toJson(Object value) {
+    try {
+      return objectMapper.writeValueAsString(value);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to serialize WebSocket message: {}", e.getMessage());
+      return "{}";
     }
-
-    private String toJson(Object value) {
-        try {
-            return objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            log.error("Failed to serialize WebSocket message: {}", e.getMessage());
-            return "{}";
-        }
-    }
+  }
 }

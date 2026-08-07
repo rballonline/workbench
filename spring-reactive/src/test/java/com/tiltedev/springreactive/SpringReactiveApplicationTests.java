@@ -13,8 +13,8 @@ import org.testcontainers.mysql.MySQLContainer;
 @Tag("integration")
 class SpringReactiveApplicationTests {
 
-    @Container @ServiceConnection static MySQLContainer mysql = new MySQLContainer("mysql:8.4");
+  @Container @ServiceConnection static MySQLContainer mysql = new MySQLContainer("mysql:8.4");
 
-    @Test
-    void contextLoads() {}
+  @Test
+  void contextLoads() {}
 }

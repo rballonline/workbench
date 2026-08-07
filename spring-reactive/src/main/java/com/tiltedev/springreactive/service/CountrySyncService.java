@@ -13,33 +13,30 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class CountrySyncService {
 
-    private final CountryRepository countryRepository;
-    private final CountryApiService countryApiService;
-    private final R2dbcEntityTemplate template;
+  private final CountryRepository countryRepository;
+  private final CountryApiService countryApiService;
+  private final R2dbcEntityTemplate template;
 
-    public Mono<Country> ensureExists(String countryCode) {
-        return countryRepository
-                .findById(countryCode)
-                .switchIfEmpty(
-                        countryApiService
-                                .fetchByCode(countryCode)
-                                .map(
-                                        result ->
-                                                Country.builder()
-                                                        .code(countryCode.toUpperCase())
-                                                        .name(result.getCommonName())
-                                                        .capital(result.getCapitalCity())
-                                                        .region(result.getRegion())
-                                                        .population(result.getPopulation())
-                                                        .flagUrl(
-                                                                result.getFlags() != null
-                                                                        ? result.getFlags().getPng()
-                                                                        : null)
-                                                        .build())
-                                .flatMap(
-                                        country -> {
-                                            log.info("Synced country to DB: {}", country.getCode());
-                                            return template.insert(Country.class).using(country);
-                                        }));
-    }
+  public Mono<Country> ensureExists(String countryCode) {
+    return countryRepository
+        .findById(countryCode)
+        .switchIfEmpty(
+            countryApiService
+                .fetchByCode(countryCode)
+                .map(
+                    result ->
+                        Country.builder()
+                            .code(countryCode.toUpperCase())
+                            .name(result.getCommonName())
+                            .capital(result.getCapitalCity())
+                            .region(result.getRegion())
+                            .population(result.getPopulation())
+                            .flagUrl(result.getFlags() != null ? result.getFlags().getPng() : null)
+                            .build())
+                .flatMap(
+                    country -> {
+                      log.info("Synced country to DB: {}", country.getCode());
+                      return template.insert(Country.class).using(country);
+                    }));
+  }
 }

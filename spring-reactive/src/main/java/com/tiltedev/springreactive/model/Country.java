@@ -14,10 +14,10 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("countries")
 public class Country {
 
-    @Id private String code;
-    private String name;
-    private String capital;
-    private String region;
-    private Long population;
-    private String flagUrl;
+  @Id private String code;
+  private String name;
+  private String capital;
+  private String region;
+  private Long population;
+  private String flagUrl;
 }

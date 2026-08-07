@@ -17,10 +17,10 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class CitySearchController {
 
-    private final CitySearchService service;
+  private final CitySearchService service;
 
-    @GetMapping("/search")
-    public Flux<CitySearchResponse> search(@ModelAttribute @Valid CitySearchRequest request) {
-        return service.search(request.getQ());
-    }
+  @GetMapping("/search")
+  public Flux<CitySearchResponse> search(@ModelAttribute @Valid CitySearchRequest request) {
+    return service.search(request.getQ());
+  }
 }

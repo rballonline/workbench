@@ -20,7 +20,7 @@ repositories {
 
 spotless {
 	java {
-		googleJavaFormat().aosp()
+		googleJavaFormat()
 		removeUnusedImports()
 		trimTrailingWhitespace()
 		endWithNewline()

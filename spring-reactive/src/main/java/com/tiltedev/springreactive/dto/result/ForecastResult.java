@@ -8,27 +8,27 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ForecastResult {
 
-    private double latitude;
-    private double longitude;
+  private double latitude;
+  private double longitude;
 
-    @JsonProperty("current")
-    private CurrentWeather current;
+  @JsonProperty("current")
+  private CurrentWeather current;
 
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class CurrentWeather {
-        private String time;
+  @Data
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class CurrentWeather {
+    private String time;
 
-        @JsonProperty("temperature_2m")
-        private double temperature;
+    @JsonProperty("temperature_2m")
+    private double temperature;
 
-        @JsonProperty("wind_speed_10m")
-        private double windSpeed;
+    @JsonProperty("wind_speed_10m")
+    private double windSpeed;
 
-        @JsonProperty("relative_humidity_2m")
-        private int humidity;
+    @JsonProperty("relative_humidity_2m")
+    private int humidity;
 
-        @JsonProperty("weather_code")
-        private int weatherCode;
-    }
+    @JsonProperty("weather_code")
+    private int weatherCode;
+  }
 }

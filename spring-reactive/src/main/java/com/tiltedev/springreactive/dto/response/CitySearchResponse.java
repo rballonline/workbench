@@ -7,12 +7,12 @@ import lombok.Data;
 @Builder
 public class CitySearchResponse {
 
-    private String cityName;
-    private Double latitude;
-    private Double longitude;
-    private String countryCode;
-    private String countryName;
-    private String capital;
-    private String region;
-    private String flagUrl;
+  private String cityName;
+  private Double latitude;
+  private Double longitude;
+  private String countryCode;
+  private String countryName;
+  private String capital;
+  private String region;
+  private String flagUrl;
 }

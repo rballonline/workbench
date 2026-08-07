@@ -17,14 +17,14 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("destinations")
 public class Destination {
 
-    @Id private Long id;
-    private String cityName;
-    private String countryCode;
-    private Double latitude;
-    private Double longitude;
-    private String addedBy;
+  @Id private Long id;
+  private String cityName;
+  private String countryCode;
+  private Double latitude;
+  private Double longitude;
+  private String addedBy;
 
-    @CreatedDate private LocalDateTime createdAt;
+  @CreatedDate private LocalDateTime createdAt;
 
-    @LastModifiedDate private LocalDateTime updatedAt;
+  @LastModifiedDate private LocalDateTime updatedAt;
 }

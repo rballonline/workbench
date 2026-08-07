@@ -8,15 +8,15 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeocodingResult {
 
-    private List<GeocodingEntry> results;
+  private List<GeocodingEntry> results;
 
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class GeocodingEntry {
-        private String name;
-        private double latitude;
-        private double longitude;
-        private String country;
-        private String country_code;
-    }
+  @Data
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class GeocodingEntry {
+    private String name;
+    private double latitude;
+    private double longitude;
+    private String country;
+    private String country_code;
+  }
 }

@@ -19,27 +19,27 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class DestinationController {
 
-    private final DestinationService service;
+  private final DestinationService service;
 
-    @GetMapping
-    public Flux<DestinationResponse> findAll() {
-        return service.findAll();
-    }
+  @GetMapping
+  public Flux<DestinationResponse> findAll() {
+    return service.findAll();
+  }
 
-    @GetMapping("/{id}")
-    public Mono<DestinationResponse> findById(@PathVariable Long id) {
-        return service.findById(id);
-    }
+  @GetMapping("/{id}")
+  public Mono<DestinationResponse> findById(@PathVariable Long id) {
+    return service.findById(id);
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<DestinationResponse> create(@RequestBody @Valid AddDestinationRequest request) {
-        return service.create(request);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public Mono<DestinationResponse> create(@RequestBody @Valid AddDestinationRequest request) {
+    return service.create(request);
+  }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> delete(@PathVariable Long id) {
-        return service.delete(id);
-    }
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public Mono<Void> delete(@PathVariable Long id) {
+    return service.delete(id);
+  }
 }

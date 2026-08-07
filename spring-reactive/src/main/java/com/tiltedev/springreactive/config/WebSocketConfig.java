@@ -18,33 +18,34 @@ import reactor.core.publisher.Sinks;
 @Configuration
 public class WebSocketConfig {
 
-    @Bean
-    public Sinks.Many<DestinationEvent> destinationEventSink() {
-        return Sinks.many().multicast().onBackpressureBuffer();
-    }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
-    }
+  @Bean
+  public Sinks.Many<DestinationEvent> destinationEventSink() {
+    return Sinks.many().multicast().onBackpressureBuffer();
+  }
 
-    @Bean
-    public HandlerMapping webSocketHandlerMapping(LiveUpdateWebSocketHandler handler) {
-        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-        mapping.setUrlMap(Map.of("/ws/destinations", handler));
-        mapping.setOrder(1);
-        return mapping;
-    }
+  @Bean
+  public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+    return mapper;
+  }
 
-    @Bean
-    public WebSocketService webSocketService() {
-        return new HandshakeWebSocketService(new ReactorNettyRequestUpgradeStrategy());
-    }
+  @Bean
+  public HandlerMapping webSocketHandlerMapping(LiveUpdateWebSocketHandler handler) {
+    SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+    mapping.setUrlMap(Map.of("/ws/destinations", handler));
+    mapping.setOrder(1);
+    return mapping;
+  }
 
-    @Bean
-    public WebSocketHandlerAdapter webSocketHandlerAdapter(WebSocketService webSocketService) {
-        return new WebSocketHandlerAdapter(webSocketService);
-    }
+  @Bean
+  public WebSocketService webSocketService() {
+    return new HandshakeWebSocketService(new ReactorNettyRequestUpgradeStrategy());
+  }
+
+  @Bean
+  public WebSocketHandlerAdapter webSocketHandlerAdapter(WebSocketService webSocketService) {
+    return new WebSocketHandlerAdapter(webSocketService);
+  }
 }

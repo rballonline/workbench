@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class CountryController {
 
-    private final CountryApiService service;
+  private final CountryApiService service;
 
-    @GetMapping("/{name}")
-    public Mono<CountryApiResult> getByName(@PathVariable String name) {
-        return service.fetchByName(name);
-    }
+  @GetMapping("/{name}")
+  public Mono<CountryApiResult> getByName(@PathVariable String name) {
+    return service.fetchByName(name);
+  }
 }
