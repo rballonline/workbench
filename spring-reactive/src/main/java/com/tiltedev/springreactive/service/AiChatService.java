@@ -10,6 +10,8 @@ import com.tiltedev.springreactive.dto.response.ApiKeyValidationResponse;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -46,6 +48,8 @@ public class AiChatService {
 
   public Flux<ServerSentEvent<String>> chat(ChatRequest request) {
     var pendingDeletes = new CopyOnWriteArrayList<PendingDeleteConfirmation>();
+    var toolInvoked = new AtomicBoolean(false);
+    var lastEmittedChar = new AtomicReference<Character>();
 
     Flux<ServerSentEvent<String>> tokens =
         assistantChatClientFactory
@@ -53,10 +57,15 @@ public class AiChatService {
             .prompt()
             .user(request.getMessage())
             .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, request.getConversationId()))
-            .toolContext(Map.of(AssistantTools.PENDING_DELETE_CONFIRMATIONS_KEY, pendingDeletes))
+            .toolContext(
+                Map.of(
+                    AssistantTools.PENDING_DELETE_CONFIRMATIONS_KEY, pendingDeletes,
+                    AssistantTools.TOOL_INVOKED_KEY, toolInvoked))
             .stream()
             .content()
-            .map(chunk -> ServerSentEvent.builder(chunk).event("token").build());
+            .map(chunk -> ServerSentEvent.builder(repairToolSeam(chunk, toolInvoked, lastEmittedChar))
+                .event("token")
+                .build());
 
     Flux<ServerSentEvent<String>> confirmations =
         Flux.defer(
@@ -79,6 +88,29 @@ public class AiChatService {
                       .event("error")
                       .build());
             });
+  }
+
+  /**
+   * Anthropic starts a fresh generation turn after a tool call, and its first chunk sometimes
+   * omits the space that would normally join it to the sentence fragment streamed before the
+   * call - see {@link AssistantTools#TOOL_INVOKED_KEY}. Only repair the seam right after a tool
+   * ran; mid-word chunk splits within one continuous generation never cross a tool call, so
+   * there's no ambiguity between "needs a space" and "resumes the same word".
+   */
+  private String repairToolSeam(
+      String chunk, AtomicBoolean toolInvoked, AtomicReference<Character> lastEmittedChar) {
+    var repaired = chunk;
+    if (toolInvoked.getAndSet(false)
+        && !chunk.isEmpty()
+        && lastEmittedChar.get() != null
+        && !Character.isWhitespace(lastEmittedChar.get())
+        && !Character.isWhitespace(chunk.charAt(0))) {
+      repaired = " " + chunk;
+    }
+    if (!chunk.isEmpty()) {
+      lastEmittedChar.set(chunk.charAt(chunk.length() - 1));
+    }
+    return repaired;
   }
 
   private String toJson(PendingDeleteConfirmation pending) {

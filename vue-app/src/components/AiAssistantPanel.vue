@@ -35,8 +35,9 @@
           rounded="lg"
           :variant="message.role === 'user' ? 'flat' : 'tonal'"
         >
-          <v-card-text class="text-body-2 py-2 px-3" style="white-space: pre-wrap">
-            <span v-if="message.content">{{ message.content }}</span>
+          <v-card-text class="text-body-2 py-2 px-3 markdown-content">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-if="message.content" v-html="renderMarkdown(message.content)" />
 
             <v-progress-circular
               v-else-if="assistantStore.sending && isLastMessage(index)"
@@ -108,6 +109,7 @@
   import { useRouter } from 'vue-router'
   import { useAssistantStore } from '@/stores/useAssistantStore'
   import { useUserStore } from '@/stores/useUserStore'
+  import { renderMarkdown } from '@/utils/markdown'
   import ApiErrorAlert from './ApiErrorAlert.vue'
 
   const { t } = useI18n()
@@ -144,3 +146,43 @@
     { deep: true },
   )
 </script>
+
+<style scoped>
+/* v-html content isn't scoped by Vue, so these target it via :deep. */
+.markdown-content :deep(p) {
+  margin: 0 0 8px;
+}
+
+.markdown-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+
+.markdown-content :deep(pre) {
+  overflow-x: auto;
+  padding: 8px;
+  border-radius: 4px;
+  background: rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.markdown-content :deep(code) {
+  font-family: monospace;
+  background: rgba(var(--v-theme-on-surface), 0.08);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+.markdown-content :deep(pre code) {
+  background: none;
+  padding: 0;
+}
+
+.markdown-content :deep(a) {
+  color: rgb(var(--v-theme-primary));
+}
+</style>

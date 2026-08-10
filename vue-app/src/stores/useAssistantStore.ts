@@ -40,7 +40,11 @@ async function readSse (
         if (line.startsWith('event:')) {
           event = line.slice(6).trim()
         } else if (line.startsWith('data:')) {
-          dataLines.push(line.slice(5).trim())
+          // Per the SSE spec, only a single leading space after the colon is stripped -
+          // the rest of the payload (including meaningful leading/trailing spaces within
+          // a streamed token) must survive, or words run together on the client.
+          const value = line.slice(5)
+          dataLines.push(value.startsWith(' ') ? value.slice(1) : value)
         }
       }
       if (dataLines.length > 0) {
